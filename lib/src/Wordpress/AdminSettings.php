@@ -96,7 +96,6 @@ abstract class AdminSettings
 	function getMenuConfig()
 	{
 		$this->defaults = \get_plugin_data($this->pluginFile);
-		$this->defaults['menu_slug'] = '';
 		return array();
 	}
 
@@ -156,7 +155,10 @@ abstract class AdminSettings
 	 */
 	public function initializeAdminPage()
 	{
-		$this->getMenuConfig();
+		if ( !$this->defaults ) {
+			$this->registerAdminMenu();
+		}
+
 		$setup = $this->getOptionsForm();
 		$group = $this->optionId . '_group';
 

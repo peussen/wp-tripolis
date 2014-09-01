@@ -1,0 +1,33 @@
+.wp-tripolis-servicestatus {
+	float: left;
+	width: 20%;
+	background-color: #fdfdfd;
+	border-radius: 4px;
+	padding: 20px;
+	margin-right: 10px;
+}
+
+.wp-tripolis-servicestatus h3 {
+	margin-top: 0;
+}
+
+#rendered_shortcode {
+	padding: 20px;
+	font-size: 15px;
+	margin: 10px 20px 10px 0;
+	display: block;
+}
+
+#wptripolis-generator div {
+	margin-bottom: 15px;
+}
+#wptripolis-generator label {
+	display: inline-block;
+	vertical-align: top;
+	width: 120px;
+	padding-top: 4px;
+}
+
+#wptripolis-generator select {
+	min-width: 250px;
+}

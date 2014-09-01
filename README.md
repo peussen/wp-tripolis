@@ -44,6 +44,7 @@ and a field definition.
 * **wp-tripolis_label**: allows you to override the label with your own text
 * **wp-tripolis_value**: allows you to set default values for fields (e.g. pre-fill with user info)
 * **wp-tripolis_required**: modify which field are mandatory
+* **wp-tripolis_submit-label**: modify which label of the submit button
 
 
 
