@@ -1,4 +1,14 @@
 <?php
+/**
+ * Plugin Name: WP-Tripolis
+ * Plugin URI: http://www.tripolis.com
+ * Description: A plugin to perform all kinds of actions with the <a href="http://www.tripolis.com/" target="_blank">Tripolis Dialogue System</a>. Please be aware that this plugin is not developed by Tripolis themselves, and may therefore be incomplete or lagging in functionality.
+ * Version: 0.1
+ * Author: Peter Eussen
+ * Author URI:  http://harperjones.nl
+ * License: GPLv3
+ */
+
 // Check for presence of wordpress
 if ( !defined("ABSPATH")) {
 	die("Not your cup of tea");
@@ -33,16 +43,6 @@ if ( WPTRIPOLIS_REQUIREMENTS_FULLFILLED ){
 		<?php
 		});
 	}
-
-	/**
-	 * Plugin Name: WP-Tripolis
-	 * Plugin URI: http://www.tripolis.com
-	 * Description: A plugin to perform all kinds of actions with the <a href="http://www.tripolis.com/" target="_blank">Tripolis Dialogue System</a>. Please be aware that this plugin is not developed by Tripolis themselves, and may therefore be incomplete or lagging in functionality.
-	 * Version: 0.1
-	 * Author: Peter Eussen
-	 * Author URI:  http://harperjones.nl
-	 * License: GPLv3
-	 */
 
 	// ===================================================================
 	// Setup here
