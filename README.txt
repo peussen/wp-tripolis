@@ -3,7 +3,7 @@ Contributors: peter.eussen
 Tags: forms, tripolis, shortcode
 Requires at least: 3.9.0
 Tested up to: 3.9.2
-Stable tag: 0.1
+Stable tag: 0.1.1
 License: GPLv3
 Author URI: http://harperjones.nl
 Plugin URL: https://github.com/HarperJones/wp-tripolis
@@ -83,6 +83,9 @@ as a start point and develop from there.
 some help figuring all the field codes out.
 
 == Changelog ==
+
+= 0.1.1 =
+* Deployment fixes, which required making a new tag
 
 = 0.1 =
 * Initial release, only supports subscribe form
