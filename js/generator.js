@@ -7,7 +7,8 @@ var wptripolis_shortcode = {
 	database: '',
 	fields: [],
 	subscribegroup: '',
-	ubsubscribegroup: ''
+	ubsubscribegroup: '',
+	action: ''
 };
 
 
@@ -48,7 +49,7 @@ var wptripolis_shortcode = {
 
 		$(document).wptripolis_generate();
 
-		if ( $(this).attr('name') == 'database') {
+		if ( $(this).attr('name') == 'database' && wptripolis_shortcode.type == 'subscribe') {
 			$('#fieldoption').html('<img src="' + wptripolis.plugin_url + '/img/loading.gif" />');
 
 			wptripolis_shortcode.fields = [];
@@ -72,8 +73,17 @@ var wptripolis_shortcode = {
 			});
 		}
 
+		if ( $(this).attr('name') == 'action') {
+			if ( wptripolis_shortcode.action == 'delete') {
+				$('#targetgroup').html('');
+				bindOptions();
+			}
+		}
+
 		if ( wptripolis_shortcode.database && wptripolis_shortcode.type &&
-				($(this).attr('name') == 'database' || $(this).attr('name') == 'type')) {
+				($(this).attr('name') == 'database' || $(this).attr('name') == 'type' || $(this).attr('name') == 'action') &&
+				(wptripolis_shortcode.type == 'subscribe' || (wptripolis_shortcode.action == 'move'))) {
+
 			$('#targetgroup').html('<img src="' + wptripolis.plugin_url + '/img/loading.gif" />');
 			wptripolis_shortcode.subscribegroup = '';
 			wptripolis_shortcode.ubsubscribegroup = '';
@@ -95,6 +105,12 @@ var wptripolis_shortcode = {
 				}
 			});
 		}
+
+		if ( wptripolis_shortcode.type == 'unsubscribe') {
+			$('#unsubscribeoption').removeClass('hidden');
+		} else {
+			$('#unsubscribeoption').addClass('hidden');
+		}
 	}
 
 	$.fn.wptripolis_generate = function() {
@@ -102,6 +118,10 @@ var wptripolis_shortcode = {
 
 		if ( wptripolis_shortcode.type ) {
 			text += ' type=' + wptripolis_shortcode.type;
+		}
+
+		if ( wptripolis_shortcode.type == 'unsubscribe' && wptripolis_shortcode.action ) {
+			text += ' action=' + wptripolis_shortcode.action;
 		}
 
 		if ( wptripolis_shortcode.database ) {

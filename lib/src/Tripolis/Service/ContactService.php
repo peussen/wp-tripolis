@@ -87,6 +87,38 @@ class ContactService extends AbstractService
 	}
 
 	/**
+	 * Obtains information about a single contact item
+	 *
+	 * @param string $contactId
+	 *
+	 * @return mixed
+	 */
+	public function getById($contactId,$fields = array(), $db = null)
+	{
+		if ( empty($fields) ) {
+			$db = $this->negotiateDB($db);
+
+			$fieldset = $this->provider->contactDatabaseField()->database($db)->all();
+			$fields   = array();
+
+			foreach($fieldset as $id => $data ) {
+				$fields[] = $data->name;
+			}
+		}
+
+		$body = array(
+			'id' => $contactId,
+			'returnContactFields' => array(
+				'contactDatabaseFieldNames' => array(
+					'contactDatabaseFieldName' => $fields
+				)
+			)
+		);
+
+		return $this->invoke(__FUNCTION__,$body);
+	}
+
+	/**
 	 * Removes a contact from a contact Group
 	 *
 	 * @param      $contactId
@@ -112,7 +144,7 @@ class ContactService extends AbstractService
 			'reference' => $reference
 		);
 
-		return $this->invoke(__FUNCTION__,body);
+		return $this->invoke(__FUNCTION__,$body);
 	}
 
 	/**
@@ -121,10 +153,8 @@ class ContactService extends AbstractService
 	 * @param $contactId
 	 * @param $groupType (STATIC/TEST/SUBSCRIPTION)
 	 */
-	public function getContactGroupSubscriptions($contactId,$groupType = 'STATIC',$database = null)
+	public function getContactGroupSubscriptions($contactId,$groupType = 'SUBSCRIPTION')
 	{
-		$db = $this->negotiateDB($database);
-
 		$body = array(
 			'id' => $contactId,
 			'groupTypes' => array(
@@ -160,6 +190,20 @@ class ContactService extends AbstractService
 				'contactField' => $values
 			)
 		);
+
+		return $this->invoke(__FUNCTION__,$body);
+	}
+
+	/**
+	 * Tries to delete a user from the database
+	 *
+	 * @param string $contactId
+	 *
+	 * @return WPTripolis/Tripolis/Response
+	 */
+	public function delete($contactId)
+	{
+		$body = array('id' => $contactId);
 
 		return $this->invoke(__FUNCTION__,$body);
 	}

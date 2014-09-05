@@ -18,6 +18,11 @@ use WPTripolis\Tripolis;
 
 class TripolisProvider
 {
+
+	const GROUP_TYPE_SUBSCRIPTION = Tripolis\Service\ContactGroupService::GROUP_SUBSCRIPTION;
+	const GROUP_TYPE_TEST = Tripolis\Service\ContactGroupService::GROUP_TEST;
+	const GROUP_TYPE_STATIC = Tripolis\Service\ContactGroupService::GROUP_STATIC;
+
 	/**
 	 * URL to the Tripolis Instance you are using (see documentation)
 	 *

@@ -71,7 +71,14 @@ class WPTripolisShortcodeGenerator extends Utility
 						<option value="unsubscribe"><?php _e('Unsubscribe','tripolis') ?></option>
 					</select>
 					</div>
-					<div id="unsubscribeoption"></div>
+					<div id="unsubscribeoption" class="hidden">
+						<label><?php _e('Unsubscribe method','tripolis') ?></label>
+						<select name="action" class="wptripols-gen-option">
+							<option value="0">--Choose unsubscribe method--</option>
+							<option value="move"><?php _e('Move to group','tripolis') ?></option>
+							<option value="delete"><?php _e('Delete from database','tripolis') ?></option>
+						</select>
+					</div>
 					<div is="databaseoption">
 						<label><?php _e('Contact Database','tripolis') ?></label>
 					<?php if ( count($databases)): ?>

@@ -13,6 +13,10 @@ class ContactGroupService extends AbstractService
 {
 	use DatabaseTrait;
 
+	const GROUP_STATIC = 'STATIC';
+	const GROUP_SUBSCRIPTION = 'SUBSCRIPTION';
+	const GROUP_TEST = 'TEST';
+
 	public function getByContactDatabaseId($db = null )
 	{
 		$db = $this->negotiateDB($db);

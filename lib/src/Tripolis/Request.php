@@ -90,6 +90,9 @@ class Request
 			// The subnamespaces drove me crazy, so lets just get rid of them all.
 			$xml = $soap->__getLastResponse();
 
+			if ( empty($xml)) {
+				throw $f;
+			}
 			// Gets rid of all namespace definitions
 			$xml = preg_replace('/\s+xmlns[^=]*="[^"]*"/i', '', $xml);
 			// Gets rid of all namespace references
@@ -124,8 +127,7 @@ class Request
 				case 407:
 					$e = new NotFoundException(
 							$errorMessage,
-							$code,
-							$f
+							$code
 					);
 
 					if (isset($error->identifiervalue)) {

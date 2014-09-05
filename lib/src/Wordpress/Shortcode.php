@@ -50,6 +50,15 @@ abstract class Shortcode
 		$this->plugin     = basename(dirname($pluginFile));
 
 		add_action('init',array($this,'register'));
+		add_action( 'wp_enqueue_scripts', array($this,'registerCustomScripts') );
+	}
+
+	/**
+	 * Hook to setup custom scripts
+	 */
+	public function registerCustomScripts()
+	{
+
 	}
 
 	/**
@@ -150,7 +159,7 @@ abstract class Shortcode
 	 *
 	 * @return string
 	 */
-	protected function getUniqueId()
+	public function getUniqueId()
 	{
 		$id = get_the_id();
 		return $this->plugin . $id;

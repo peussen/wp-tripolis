@@ -7,6 +7,7 @@
  */
 
 namespace WPTripolis;
+use WPTripolis\Tripolis\Response\AbstractIteratorResponse;
 
 
 /**
@@ -20,9 +21,71 @@ class TemplateWrapper
 	static $current = array();
 	static $instance= array();
 
+	static public function setSubscriptions( array $groups )
+	{
+		self::$instance['subscriptions'] = $groups;
+	}
+
+	static public function getSubscriptions()
+	{
+		return isset(self::$instance['subscriptions']) ? self::$instance['subscriptions'] : array();
+	}
+
+	public static function setContactId( $contactId )
+	{
+		self::$instance['contactid'] = $contactId;
+	}
+
+	public static function getContactId()
+	{
+		return isset(self::$instance['contactid']) ? self::$instance['contactid'] : false;
+	}
+
+	public static function setContactMeta($contact)
+	{
+		self::$instance['contact'] = $contact;
+	}
+
+	public static function getContactMeta($meta = false)
+	{
+		if ( isset(self::$instance['contact'])) {
+			if ( $meta === false ) {
+				return self::$instance['contact'];
+			}
+
+			if ( isset(self::$instance['contact']->$meta)) {
+				return self::$instance['contact']->$meta;
+			}
+		}
+		return false;
+	}
 	static public function registerInstance($name,$instance)
 	{
 		self::$instance[$name] = $instance;
+	}
+
+	static public function getInstance($name)
+	{
+		if ( isset(self::$instance[$name])) {
+			return self::$instance[$name];
+		}
+		return null;
+	}
+
+	static public function createFieldName($name)
+	{
+		if (isset(self::$instance['shortcode'])) {
+			return self::$instance['shortcode']->getUniqueId() . '[' . esc_attr($name) . ']';
+		}
+		return $name;
+	}
+
+	static public function createFieldId($name)
+	{
+		if (isset(self::$instance['shortcode'])) {
+			return self::$instance['shortcode']->getUniqueId() . '_' . preg_replace('/[ \\"\']/','',$name);
+		}
+		return $name;
 	}
 
 	static public function getPluginName()
@@ -74,5 +137,6 @@ class TemplateWrapper
 		}
 		return false;
 	}
+
 }
 

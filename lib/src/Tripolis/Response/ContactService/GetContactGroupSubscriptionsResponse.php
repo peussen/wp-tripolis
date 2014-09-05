@@ -6,7 +6,7 @@
  * Time: 09:56
  */
 
-namespace WPTripolis\Tripolis\Response\Contacts;
+namespace WPTripolis\Tripolis\Response\ContactService;
 
 
 use WPTripolis\Tripolis\Response\AbstractIteratorResponse;

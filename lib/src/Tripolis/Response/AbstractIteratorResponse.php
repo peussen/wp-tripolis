@@ -29,12 +29,21 @@ abstract class AbstractIteratorResponse extends Response implements \Iterator, \
 
 			if ( isset($response->$primaryKey->$secundairyKey)) {
 				foreach( $response->$primaryKey->$secundairyKey as $elem ) {
-					$tmp[$elem->id] = $elem;
+					if ( isset($elem->id)) {
+						$tmp[$elem->id] = $elem;
+					} else {
+						$tmp[] = $elem;
+					}
 				}
 			}
 		}
 		$this->setData($tmp);
 
+	}
+
+	public function toArray()
+	{
+		return (array)$this->data;
 	}
 
 	/**
