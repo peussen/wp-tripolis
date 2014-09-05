@@ -37,14 +37,37 @@ You can override all templating done by creating a directory wp-tripolis in your
 To give you a head start you can copy the templates from the templates directory.
 
 ###Customization filters###
-There are a couple of filters you can use to manipulate the fields of the form. All filters will pass 2 parameters, the value
+**Subscribe Form**
+
+There are a couple of filters you can use to manipulate the fields of the subscribe form. All filters will pass 2 parameters, the value
 and a field definition.
 
 * **wp-tripolis_classes**: allows you to add/remove classes from a field/label
 * **wp-tripolis_label**: allows you to override the label with your own text
 * **wp-tripolis_value**: allows you to set default values for fields (e.g. pre-fill with user info)
 * **wp-tripolis_required**: modify which field are mandatory
-* **wp-tripolis_submit-label**: modify which label of the submit button
+* **wp-tripolis_subscribe-submit-label**: modify which label of the submit button
 
+Furthermore you can use the following 2 actions to add extra content/before or after the form:
+
+* wptripolis_before_subscribe_form
+* wptripolis_after_subscribe_form
+
+**Unsubscribe Form**
+
+There are a couple of filters & actions you can use to manipulate the unsubscribe form. You can also take the standard
+unsubscribe page and copy it to your theme folder and customize it there. Just be sure to add the nonce and use the
+wptripolis_field_name() method to style your form.
+
+The filters you can use are:
+
+* **wp-tripolis_unsubscribe-submit-label**: Modify the text of the submit button
+* **wp-tripolis_group-label**: Modify the label of a group
+* **wptripolis_unsubscribe_introduction**: Alters the heading text
+
+The actions that are available allow you to add content before or after the form. They are:
+
+* wptripolis_before_unsubscribe_form
+* wptripolis_before_unsubscribe_form
 
 

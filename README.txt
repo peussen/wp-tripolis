@@ -59,7 +59,7 @@ version first, if you are using an allowed version, but are still at a loss, let
 You can override all templating done by creating a directory wp-tripolis in your theme directory and place all files there.
 To give you a head start you can copy the templates from the templates directory.
 
-= How can I alter fields in the form? =
+= How can I alter fields in the subscribe form? =
 There are a couple of filters you can use to manipulate the fields of the form. All filters will pass 2 parameters, the value
 and a field definition.
 
@@ -67,10 +67,28 @@ and a field definition.
 * **wp-tripolis_label**: allows you to override the label with your own text
 * **wp-tripolis_value**: allows you to set default values for fields (e.g. pre-fill with user info)
 * **wp-tripolis_required**: modify which field are mandatory
-* **wp-tripolis_submit-label**: modify which label of the submit button
+* **wp-tripolis_subscribe-submit-label**: modify which label of the submit button
 
-= I need an unsubscribe page! =
-We are working on it!
+Furthermore you can use the following 2 actions to add extra content/before or after the form:
+
+* wptripolis_before_subscribe_form
+* wptripolis_after_subscribe_form
+
+= How can I alter the unsubscribe page =
+There are a couple of filters & actions you can use to manipulate the unsubscribe form. You can also take the standard
+unsubscribe page and copy it to your theme folder and customize it there. Just be sure to add the nonce and use the
+wptripolis_field_name() method to style your form.
+
+The filters you can use are:
+
+* **wp-tripolis_unsubscribe-submit-label**: Modify the text of the submit button
+* **wp-tripolis_group-label**: Modify the label of a group
+* **wptripolis_unsubscribe_introduction**: Alters the heading text
+
+The actions that are available allow you to add content before or after the form. They are:
+
+* wptripolis_before_unsubscribe_form
+* wptripolis_before_unsubscribe_form
 
 = Can i have a profile page, where people can edit their subscriptions? =
 Although not currently planned, this may come in the future if enough people require it. You can always take the plugin
@@ -83,6 +101,12 @@ as a start point and develop from there.
 some help figuring all the field codes out.
 
 == Changelog ==
+
+= 0.2 =
+* Unsubscribe implementation
+* Further implementation of some services
+* Added a base stylesheet to make subscribe/unsubscribe forms look better by default
+* Fixed some bugs
 
 = 0.1.1 =
 * Deployment fixes, which required making a new tag
