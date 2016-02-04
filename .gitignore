@@ -1,2 +1,5 @@
 cli.php
 .DS_Store
+.name
+vendor
+.idea
