@@ -10,6 +10,7 @@ namespace WPTripolis;
 
 
 use WPTripolis\Tripolis\AlreadyExistsException;
+use WPTripolis\Tripolis\DirectMail;
 use WPTripolis\Tripolis\NotFoundException;
 use WPTripolis\Wordpress\Shortcode;
 
@@ -365,10 +366,12 @@ class WPTripolisShortcode extends Shortcode
 
 					foreach( $remove as $groupId ) {
 						$contactService->removeFromContactGroup($postData['contactid'], $groupId);
+						do_action('wptripolis/unsubscribe',$postData['contactid'],$groupId);
 					}
 
 					foreach( $add as $groupId ) {
 						$contactService->addToContactGroup($postData['contactid'],$groupId);
+						do_action('wptripolis/subscribe',$postData['contactid'],$groupId);
 					}
 
 
@@ -439,7 +442,9 @@ class WPTripolisShortcode extends Shortcode
 				if ( !$status ) {
 					switch( strtolower($attr['type'])) {
 						case 'subscribe':
-							if ($this->subscribe($client,$attr['database'],$attr['subscribegroup'],$postData)) {
+							$directmail = isset($attr['directmail']) ? $attr['directmail'] : false;
+
+							if ($this->subscribe($client,$attr['database'],$attr['subscribegroup'],$postData,$directmail)) {
 								$status['form'] = array(
 										'class' 	=> 'success',
 										'message'	=> __('You have been succesfully subscribed','tripolis')
@@ -461,7 +466,7 @@ class WPTripolisShortcode extends Shortcode
 		}
 	}
 
-	public function subscribe($client,$database,$group,$contactData)
+	public function subscribe($client,$database,$group,$contactData,$directmail = false)
 	{
 		try {
 			$contactService = $client->contact();
@@ -470,7 +475,24 @@ class WPTripolisShortcode extends Shortcode
 			$contactId = $contactService->replace($contactData,'id');
 
 			if ( $contactId ) {
+//				$subscription = $client->subscription();
+//				$subscription->database($database);
+//				$response     = $subscription->SubscribeContact($contactData,array($group),);
+
 				$response = $contactService->addToContactGroup($contactId,$group);
+
+				if ( $response && $directmail ) {
+					$dm = new DirectMail($client);
+					$dm->db($database);
+					$dmId = $dm->getByName($directmail);
+
+					if ($dm->send($dmId,$contactId) !== false) {
+						do_action('wptripolis/subscribe/mailsent');
+					} else {
+						do_action('wptripolis/subscribe/mailnotsent');
+					}
+				}
+				do_action('wptripolis/subscribe',$contactId,$group);
 				return $response->id;
 			}
 		} catch ( NotFoundException $e ) {

@@ -252,6 +252,41 @@ class ContactService extends AbstractService
 		return false;
 	}
 
+	public function search(array $where = array())
+	{
+		$fieldMatches = array();
+
+		foreach ($where as $clause) {
+			if ( !is_array($clause) || count($clause) < 2 || count($clause) > 3) {
+				throw new \InvalidArgumentException('Search condition error');
+			}
+
+			if ( count($clause) == 3) {
+				$fieldMatches[] = array(
+						'contactDatabaseFieldId' => $clause[0],
+						'operator'               => $this->operatorToKeyword($clause[1]),
+						'value'                  => $clause[2]
+				);
+			} else {
+				$fieldMatches[] = array(
+						'contactDatabaseFieldId' => $clause[0],
+						'operator'               => 'EQUALS',
+						'value'                  => $clause[1]
+				);
+			}
+		}
+		$body = array(
+				'contactDatabaseId' => $this->db,
+				'contactFieldSearchParameters' => array (
+						'contactFieldSearchParameter' => $fieldMatches
+				),
+				'returnContactFields' => array(
+						'returnAllContactFields' => 1
+				)
+		);
+		return $this->invoke(__FUNCTION__,$body);
+	}
+
 	/**
 	 * Converts an array into a "Complex" Soap Variable structure
 	 * The value of the array will be converted to an entry called "value", and the key
