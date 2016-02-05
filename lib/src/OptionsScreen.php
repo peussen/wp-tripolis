@@ -58,7 +58,8 @@ class OptionsScreen extends AdminSettings
 							'args'		=> array(
 								'options' => array(
 										'https://td42.tripolis.com',
-										'https://td43.tripolis.com'
+										'https://td43.tripolis.com',
+										'https://td50.tripolis.com',
 								),
 								'val_is_key' => true,
 								'default' => 'https://td43.tripolis.com',
