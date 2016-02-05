@@ -475,21 +475,17 @@ class WPTripolisShortcode extends Shortcode
 			$contactId = $contactService->replace($contactData,'id');
 
 			if ( $contactId ) {
-//				$subscription = $client->subscription();
-//				$subscription->database($database);
-//				$response     = $subscription->SubscribeContact($contactData,array($group),);
 
 				$response = $contactService->addToContactGroup($contactId,$group);
 
 				if ( $response && $directmail ) {
 					$dm = new DirectMail($client);
 					$dm->db($database);
-					$dmId = $dm->getByName($directmail);
 
-					if ($dm->send($dmId,$contactId) !== false) {
-						do_action('wptripolis/subscribe/mailsent');
+					if ($dm->send($directmail,$contactId) !== false) {
+						do_action('wptripolis/subscribe/mailsent',$contactData,$group);
 					} else {
-						do_action('wptripolis/subscribe/mailnotsent');
+						do_action('wptripolis/subscribe/mailnotsent',$contactData,$group);
 					}
 				}
 				do_action('wptripolis/subscribe',$contactId,$group);
