@@ -163,7 +163,7 @@ class WPTripolisShortcodeGenerator extends Utility
 			$tp = $this->getClient();
 
 			try {
-				$groups = $tp->COntactGroup()->database($data['database'])->all();
+				$groups = $tp->ContactGroup()->database($data['database'])->all();
 
 				if ( $data['type'] == 'subscribe' ) {
 					$label = __('Subscribers Group','tripolis');
