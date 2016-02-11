@@ -2,8 +2,8 @@
 Contributors: peter.eussen
 Tags: forms, tripolis, shortcode
 Requires at least: 3.9.0
-Tested up to: 3.9.2
-Stable tag: 0.2
+Tested up to: 4.4.1
+Stable tag: 0.3
 License: GPLv3
 Author URI: http://harperjones.nl
 Plugin URL: https://github.com/HarperJones/wp-tripolis
