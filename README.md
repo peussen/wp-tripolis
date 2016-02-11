@@ -53,6 +53,13 @@ Furthermore you can use the following 2 actions to add extra content/before or a
 * wptripolis_before_subscribe_form
 * wptripolis_after_subscribe_form
 
+You have also two actions you can use to handle confirmation mail sending
+* wptripolis/subscribe/mailsent
+* wptripolis/subscribe/mailnotsent
+
+And you can use the action `wptripolis/subscribe` to add extra functionality after someone subscribed.
+
+
 **Unsubscribe Form**
 
 There are a couple of filters & actions you can use to manipulate the unsubscribe form. You can also take the standard

@@ -74,6 +74,12 @@ Furthermore you can use the following 2 actions to add extra content/before or a
 * wptripolis_before_subscribe_form
 * wptripolis_after_subscribe_form
 
+You have also two actions you can use to handle confirmation mail sending
+* wptripolis/subscribe/mailsent
+* wptripolis/subscribe/mailnotsent
+
+And you can use the action `wptripolis/subscribe` to add extra functionality after someone subscribed.
+
 = How can I alter the unsubscribe page =
 There are a couple of filters & actions you can use to manipulate the unsubscribe form. You can also take the standard
 unsubscribe page and copy it to your theme folder and customize it there. Just be sure to add the nonce and use the
@@ -101,6 +107,12 @@ as a start point and develop from there.
 some help figuring all the field codes out.
 
 == Changelog ==
+
+= 0.3 =
+* Made it possible to send a confirmation mail when subscribing using the directmail attribute
+* Added some extra actions to the subscribe form to add some extra functionality when needed.
+  These actions use a different syntax (slashes instead of underscores). Future releases will
+  be using this syntax for all actions.
 
 = 0.2 =
 * Unsubscribe implementation
