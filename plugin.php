@@ -3,7 +3,7 @@
  * Plugin Name: WP-Tripolis
  * Plugin URI: https://github.com/HarperJones/wp-tripolis
  * Description: A plugin to perform all kinds of actions with the <a href="http://www.tripolis.com/" target="_blank">Tripolis Dialogue System</a>. Please be aware that this plugin is not developed by Tripolis themselves, and may therefore be incomplete or lagging in functionality.
- * Version: 0.3
+ * Version: 0.3.1
  * Author: Peter Eussen
  * Author URI:  http://harperjones.nl
  * License: GPLv3

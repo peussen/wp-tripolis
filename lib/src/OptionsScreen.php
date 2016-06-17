@@ -45,6 +45,11 @@ class OptionsScreen extends AdminSettings
 				array( $this, 'sanitize' ) // Sanitize
 		);
 
+		$options = array();
+		for ( $i = 36; $i < 55; $i++) {
+			$options[] = 'https://td' . $i . '.tripolis.com';
+		}
+
 		return array(
 			'sections'=> array(
 				array(
@@ -56,11 +61,7 @@ class OptionsScreen extends AdminSettings
 							'label'		=> __('Tripolis Environment','tripolis'),
 							'type'		=> 'select',
 							'args'		=> array(
-								'options' => array(
-										'https://td42.tripolis.com',
-										'https://td43.tripolis.com',
-										'https://td50.tripolis.com',
-								),
+								'options' => $options,
 								'val_is_key' => true,
 								'default' => 'https://td43.tripolis.com',
 							)

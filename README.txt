@@ -3,7 +3,7 @@ Contributors: peter.eussen
 Tags: forms, tripolis, shortcode
 Requires at least: 3.9.0
 Tested up to: 4.4.1
-Stable tag: 0.3
+Stable tag: 0.3.1
 License: GPLv3
 Author URI: http://harperjones.nl
 Plugin URL: https://github.com/HarperJones/wp-tripolis
@@ -107,6 +107,9 @@ as a start point and develop from there.
 some help figuring all the field codes out.
 
 == Changelog ==
+
+= 0.3.1 =
+* Added some extra servers to the selectionlist
 
 = 0.3 =
 * Made it possible to send a confirmation mail when subscribing using the directmail attribute
