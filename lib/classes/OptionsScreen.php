@@ -9,8 +9,9 @@
 namespace WPTripolis;
 
 
-use WPTripolis\Tripolis\Response\UserService\GetByAuthInfoResponse;
-use WPTripolis\Tripolis\UnauthorizedException;
+use HarperJones\Tripolis\Response\UserService\GetByAuthInfoResponse;
+use HarperJones\Tripolis\TripolisProvider;
+use HarperJones\Tripolis\UnauthorizedException;
 use WPTripolis\Wordpress\AdminSettings;
 
 

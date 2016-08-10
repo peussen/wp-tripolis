@@ -14,8 +14,6 @@ namespace WPTripolis;
  * @author Peter Eussen <peter.eussen@harperjones.nl>
  * @version 1.0
  */
-use WPTripolis\Tripolis;
-
 class TripolisProvider
 {
 

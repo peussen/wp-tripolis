@@ -7,7 +7,7 @@
 namespace WPTripolis\Tripolis;
 
 
-use WPTripolis\TripolisProvider;
+use WPTripolis;
 
 class DirectMail
 {
@@ -47,8 +47,6 @@ class DirectMail
         } catch (\Exception $e) {
             return false;
         }
-//
-        var_dump($response);
     }
 
     public function getByName($name)

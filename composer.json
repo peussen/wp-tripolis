@@ -1,0 +1,36 @@
+{
+  "name": "harperjones/wp-tripolis",
+  "type": "wordpress-plugin",
+  "description": "Plugin that allows you to use Tripolis for sending e-mails",
+  "license": "MIT",
+  "keywords": [
+    "wordpress",
+    "tripolis",
+    "newsletter"
+  ],
+  "authors": [
+    {
+      "name": "Peter Eussen",
+      "email": "peter.eussen@harperjones.nl",
+      "homepage": "http://harperjones.nl"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "WPTripolis\\": "lib/classes/"
+    }
+  },
+  "repositories":[
+    {
+      "type":"composer",
+      "url":"https://wpackagist.org"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "composer/installers": "~1.0",
+    "harperjones/tripolis-api": "dev-master",
+    "pimple/pimple": "~3.0",
+    "michaeluno/admin-page-framework": "^3.7"
+  }
+}
