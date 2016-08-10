@@ -7,6 +7,8 @@
 namespace WPTripolis;
 
 
+use WPTripolis\Admin\FormList;
+
 class Administration extends \AdminPageFrameworkLoader_AdminPage
 {
   public function setUp()
@@ -14,28 +16,19 @@ class Administration extends \AdminPageFrameworkLoader_AdminPage
     $this->setRootMenuPage('Tripolis');
     $this->addSubMenuItems(
       array(
-        'title' => 'Forms',
-        'page_slug'  => 'wptripolis_forms',
+        'title' => 'Settings',
+        'page_slug'  => 'wptripolis_settings',
       ),
       array(
         'title' => 'Diagnostics',
         'page_slug'  => 'wptripolis_diagnostics',
-      ),
-      array(
-        'title' => 'Settings',
-        'page_slug'  => 'wptripolis_settings',
       )
     );
   }
 
-  public function do_wptripolis_forms()
-  {
-
-  }
-
   public function do_wptripolis_diagnostics()
   {
-
+    echo "<h3>Diganostics</h3>";
   }
 
   public function do_wptripolis_settings()

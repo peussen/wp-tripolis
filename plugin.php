@@ -50,6 +50,8 @@ if ( WPTRIPOLIS_REQUIREMENTS_FULLFILLED ){
 	require( __DIR__ . '/vendor/autoload.php');
 	require('vendor/michaeluno/admin-page-framework/admin-page-framework-loader.php');
 
+	add_action('init', '\\WPTripolis\\FormPostType::register');
+
 	$_wptripols 						 = new \Pimple\Container();
 	$_wptripols['shortcode'] = new \WPTripolis\WPTripolisShortcode(__FILE__);
 	$_wptripols['url']			 = plugins_url() . '/wp-tripolis/';
