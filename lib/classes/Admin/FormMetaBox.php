@@ -66,21 +66,23 @@ class FormMetaBox
 
   public function do_savePost($post_id)
   {
-    if ( isset($_POST['json_content'])) {
+    if ( isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['json_content'])) {
       remove_action('save_post', __CLASS__ . '::savePost',20,2);
 
       wp_update_post( [ 'ID' => $post_id, 'post_content' => $_POST['json_content'] ] );
 
       add_action('save_post', __CLASS__ . '::savePost',20,2);
+
     }
+    return true;
   }
 
   public function do_loadScripts()
   {
     global $_wptripolis;
 
-    wp_enqueue_script('wptripolis-admin-js',$_wptripolis['url'] . 'js/admin.js',['jquery']);
-    wp_enqueue_style('wptripolis-admin-css',$_wptripolis['url'] . 'js/admin.css');
+    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js',['jquery']);
+    wp_enqueue_style('wptripolis-css',$_wptripolis['url'] . 'css/admin.css');
   }
 
   static public function __callStatic($name,$arguments)
@@ -94,7 +96,7 @@ class FormMetaBox
   {
     add_action('wp_ajax_wptripolis_get_database_fields', __CLASS__ . '::getDatabaseFields');
     add_action('save_post', __CLASS__ . '::savePost',20,2);
-    add_action('wp_enqueue_scripts', __CLASS__ . '::loadScripts');
+    add_action('admin_enqueue_scripts', __CLASS__ . '::loadScripts');
   }
 
   static public function instance()
