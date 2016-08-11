@@ -11,6 +11,11 @@ namespace WPTripolis;
 
 use WPTripolis\Wordpress\Utility;
 
+/**
+ * Class WPTripolisShortcodeGenerator
+ * @package WPTripolis
+ * @deprecated
+ */
 class WPTripolisShortcodeGenerator extends Utility
 {
 	public function __construct( $pluginFile, $menutitle, $pagetitle ) {

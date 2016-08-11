@@ -7,6 +7,8 @@
 namespace WPTripolis;
 
 
+use WPTripolis\Admin\FormMetaBox;
+
 class FormPostType
 {
   static public function register()
@@ -43,9 +45,22 @@ class FormPostType
       'menu_position'      => null,
       'exclude_from_search'=> true,
       'menu_icon'          => 'dashicons-id-alt',
-      'supports'           => array( 'title', 'editor' )
+      'supports'           => array( 'title')
     );
 
     register_post_type( 'wptripolis-form', $args );
+
+    add_action('load-post.php', __CLASS__ . '::setupMetaBox');
+    add_action('load-post-new.php',__CLASS__ . '::setupMetaBox');
+  }
+
+  static public function setupMetaBox()
+  {
+    add_action('add_meta_boxes',__CLASS__ . '::createMetaBox');
+  }
+
+  static public function createMetaBox()
+  {
+    add_meta_box('wptripolis-editor',__('Form','tripolis'), 'WPTripolis\\Admin\\FormMetaBox::render','wptripolis-form', 'normal', 'high');
   }
 }

@@ -12,7 +12,7 @@ class Config
   static public function get($key)
   {
     return static::getOptionKey(
-      'APF_AddFields',
+      'WPTripolis\\Administration',
       $key,
       static::getOptionKey('wptripolis_optionsscreen',$key)
     );

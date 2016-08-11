@@ -19,6 +19,7 @@ use WPTripolis\Wordpress\AdminSettings;
  * WP-Tripolis Settings page Setup & Handling class
  *
  * @package WPTripolis
+ * @deprecated
  */
 class OptionsScreen extends AdminSettings
 {
