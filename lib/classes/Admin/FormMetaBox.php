@@ -21,15 +21,33 @@ class FormMetaBox
 
     if ( $db ) {
       $fieldGroups = $this->api->contactDatabaseFieldGroup()->all($db);
-      $response    = [];
+      $response    = [
+        'db'          => $db,
+        'fieldgroups' => [],
+        'fields'      => [],
+      ];
 
       foreach( $fieldGroups as $fg ) {
-
-        $response[] = [
+        $response['fieldgroups'][] = [
           'id'    => $fg->id,
-          'label' => $fg->label,
-          'fields'=> $this->api->contactDatabaseField()->getByContactDatabaseFieldGroupId($fg->id)
+          'label' => $fg->label
         ];
+
+        $fieldsInGroup = $this->api->contactDatabaseField()->getByContactDatabaseFieldGroupId($fg->id);
+
+        foreach( $fieldsInGroup as $field ) {
+          $response['fields'][] = [
+            'id'            => $field->id,
+            'label'         => $field->label,
+            'combinedlabel' => $fg->label . ' / ' . $field->label,
+            'required'      => $field->required,
+            'fieldgroup'    => $fg->id,
+            'indexfield'    => $field->key,
+            'default'       => $field->defaultValue,
+            'type'          => strtolower($field->kindOfField),
+            'options'       => $field->picklistItems,
+          ];
+        }
       }
 
       echo json_encode($response);
