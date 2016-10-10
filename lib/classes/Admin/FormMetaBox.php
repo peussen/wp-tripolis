@@ -54,7 +54,7 @@ class FormMetaBox
     </div>
     <div class="field-container">
       <label for="wptripolis_type">for database</label>
-      <select name="wptripolis_database">
+      <select name="wptripolis_database" data-base id="database">
         <?php foreach( $dbs as $db ):?>
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>
