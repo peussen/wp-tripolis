@@ -27,7 +27,7 @@
 
   function getFields(e)
   {
-      e.preventDefault();
+      //e.preventDefault();
       // Object containing all fields we wantto use
       var fieldsUsed = {
         db: $('[data-tripolis="db"]').val(),
