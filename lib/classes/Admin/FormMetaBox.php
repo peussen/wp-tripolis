@@ -19,10 +19,10 @@ class FormMetaBox
   {
     $db = (isset($_GET['db']) ? $_GET['db'] : null);
 
-    header('Content-Type: text/json');
-    echo '
-{"db":"E7UQdAG70nSdt1r29a3uqA","fieldgroups":[{"id":"+oKI2z1O0Usvr3FGx_Oj5Q","label":"default"}],"fields":[{"id":"AhDu43H0K2fMtw07oMKmsQ","label":"E-mail","combinedlabel":"default \/ E-mail","required":true,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":true,"default":"","type":"general","options":{}},{"id":"ZVNqOw+oOtP3u+EDUP+okA","label":"voornaam","combinedlabel":"default \/ voornaam","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"KKxylAOu0z_8psK6wbCHZg","label":"Tussenvoegsel","combinedlabel":"default \/ Tussenvoegsel","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"bKSfE3Uw8fA84kibxWnHXw","label":"Achternaam","combinedlabel":"default \/ Achternaam","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"m4EzaJ8EZGUg0JAEI3onGA","label":"Aanmelddatum","combinedlabel":"default \/ Aanmelddatum","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"_Pk7J3NQXYGmsE7XpXTCIw","label":"Aanmeld IP","combinedlabel":"default \/ Aanmeld IP","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"5yIZWHadbpjgnc_js1tiog","label":"Geslacht","combinedlabel":"default \/ Geslacht","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"4unvFsjLwFnhFnZaISyyrQ","label":"Initials","combinedlabel":"default \/ Initials","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"pLa4l+Mld2vNGElf_gO4UA","label":"Aanhef","combinedlabel":"default \/ Aanhef","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}}]}';
-exit();
+//    header('Content-Type: text/json');
+//    echo '
+//{"db":"E7UQdAG70nSdt1r29a3uqA","fieldgroups":[{"id":"+oKI2z1O0Usvr3FGx_Oj5Q","label":"default"}],"fields":[{"id":"AhDu43H0K2fMtw07oMKmsQ","label":"E-mail","combinedlabel":"default \/ E-mail","required":true,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":true,"default":"","type":"general","options":{}},{"id":"ZVNqOw+oOtP3u+EDUP+okA","label":"voornaam","combinedlabel":"default \/ voornaam","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"KKxylAOu0z_8psK6wbCHZg","label":"Tussenvoegsel","combinedlabel":"default \/ Tussenvoegsel","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"bKSfE3Uw8fA84kibxWnHXw","label":"Achternaam","combinedlabel":"default \/ Achternaam","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"m4EzaJ8EZGUg0JAEI3onGA","label":"Aanmelddatum","combinedlabel":"default \/ Aanmelddatum","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"_Pk7J3NQXYGmsE7XpXTCIw","label":"Aanmeld IP","combinedlabel":"default \/ Aanmeld IP","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"5yIZWHadbpjgnc_js1tiog","label":"Geslacht","combinedlabel":"default \/ Geslacht","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"4unvFsjLwFnhFnZaISyyrQ","label":"Initials","combinedlabel":"default \/ Initials","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}},{"id":"pLa4l+Mld2vNGElf_gO4UA","label":"Aanhef","combinedlabel":"default \/ Aanhef","required":false,"fieldgroup":"+oKI2z1O0Usvr3FGx_Oj5Q","indexfield":false,"default":"","type":"general","options":{}}]}';
+//exit();
 
     if ( $db ) {
       $fieldGroups = $this->api->contactDatabaseFieldGroup()->all($db);
@@ -62,8 +62,9 @@ exit();
 
   public function do_render()
   {
-    //$dbs = $this->api->ContactDatabase()->all();
+    $dbs = $this->api->ContactDatabase()->all();
 
+    /*
     $db = new \stdClass();
     $db->id = 'a';
     $db->label = "Dummy";
@@ -72,6 +73,7 @@ exit();
     $db->id = 'b';
     $db->label = "Dummy 2";
     $dbs[] = $db;
+    */
 
     // @Todo, fetch post and fill the json_content attribute
     ?>
