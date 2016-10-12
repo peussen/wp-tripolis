@@ -62,6 +62,8 @@ class FormMetaBox
 
   public function do_render()
   {
+    global $post;
+
     $dbs = $this->api->ContactDatabase()->all();
 
     // $db = new \stdClass();
@@ -75,7 +77,7 @@ class FormMetaBox
 
     // @Todo, fetch post and fill the json_content attribute
     ?>
-    <input type="hidden" data-tripolis="send-data" name="json_content" value="<?php ?>" />
+    <input type="hidden" data-tripolis="send-data" name="json_content" value="<?= esc_attr($post->post_content) ?>" />
     <div class="field-container">
       <label for="wptripolis_type">create a</label>
       <select name="wptripolis_type" data-tripolis="type">
