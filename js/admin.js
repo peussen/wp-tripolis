@@ -1,12 +1,14 @@
 (function($){
 
-  var $selectboxFields = $('[data-tripolis="fields"]'),
-      $listFields = $('[data-tripolis="fields-selected"]'),
-
       // This will contain all the fields for the database
       availableFields = [];
 
     $(document).on('click', '#publish', getFields);
+
+    $("#taxonomy_banner_image").click('click', , function() {                 
+        tb_show("", "filename?TB_iframe=true");
+        return false;
+    });
 
     function getAvailableObjectbyId(id) 
     {
@@ -57,7 +59,6 @@
     html(value + (field.required ? '' : '<span data-selected>X</span>')).
     appendTo('[data-tripolis="fields-selected"]');
     $('.sortable').sortable().disableSelection();
-    console.log($listFields);
   }
 
   function addSelectOption(id, value)
@@ -68,7 +69,7 @@
     appendTo('[data-tripolis="fields"]');
   }
 
-  $('.sortable').sortable().disableSelection();
+  // $('.sortable').sortable().disableSelection();
 
   $(document.body).on('click', '[data-tripolis-="add-field"]', function() {
     preventDefault();
@@ -91,7 +92,7 @@
 
  //empty fields when selecting new
   function wptripolisResetFields() {
-    $selectboxFields.empty();
+    $('[data-tripolis="fields"]').empty();
     $('[data-tripolis="fields-selected"]').empty();
   }
 
@@ -121,5 +122,4 @@
         });
       }); 
   }
-
 })(jQuery);
