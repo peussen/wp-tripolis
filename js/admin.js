@@ -6,18 +6,49 @@
       // This will contain all the fields for the database
       availableFields = [];
 
+    $(document).on('click', '#publish', getFields);
+
+    function getAvailableObjectbyId(id) 
+    {
+      var field = availableFields.filter(function (obj) {
+        return obj.id == id;
+      });
+
+      if ( !field.length ) {
+        return;
+      }
+
+      field = field[0];
+
+      return field;
+    }
+
+  function getFields(e)
+  {
+      e.preventDefault();
+      // Object containing all fields we wantto use
+      var fieldsUsed = {
+        db: $('[data-tripolis="db"]').val(),
+        type: $('[data-tripolis="type"]').val(),
+        contactgroup:'',
+        fields:[]
+    };
+
+    $('[data-tripolis="fields-selected"] li').each(function() {
+
+        var field = getAvailableObjectbyId($(this).data('id'));
+        fieldsUsed.fields.push(field);
+    });
+    // console.log(fieldsUsed);
+    var magic = JSON.stringify(fieldsUsed);
+    $('[data-tripolis="send-data"]').val(magic);
+
+  }
+
   function addFieldToForm(id, value)
   {
     // Zoek veld met ID in available Fields
-    var field = availableFields.filter(function (obj) {
-      return obj.id == id;
-    });
-
-    if ( !field.length ) {
-      return;
-    }
-
-    field = field[0];
+    var field = getAvailableObjectbyId(id);
 
     $('<li />').
     data('id',id).
@@ -26,6 +57,7 @@
     html(value + (field.required ? '' : '<span data-selected>X</span>')).
     appendTo('[data-tripolis="fields-selected"]');
     $('.sortable').sortable().disableSelection();
+    console.log($listFields);
   }
 
   function addSelectOption(id, value)
@@ -47,7 +79,6 @@
       $selectedFields = $(':selected', this);
 
       $selectedFields.each(function(key, item){ 
-        console.log(item);
         item = $(item);
         addFieldToForm(item.attr('value'),item.html());
         item.remove();
@@ -61,14 +92,14 @@
  //empty fields when selecting new
   function wptripolisResetFields() {
     $selectboxFields.empty();
-    $listFields.empty();
+    $('[data-tripolis="fields-selected"]').empty();
   }
 
   
   function wptripolisGetFields() {
 
       wptripolisResetFields();
-      
+
       var dbSelected = $(this).val(),
           callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + dbSelected;
 
@@ -90,8 +121,5 @@
         });
       }); 
   }
-
-
-
 
 })(jQuery);

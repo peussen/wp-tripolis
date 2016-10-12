@@ -75,10 +75,10 @@ class FormMetaBox
 
     // @Todo, fetch post and fill the json_content attribute
     ?>
-    <input type="hidden" name="json_content" value="<?php ?>" />
+    <input type="hidden" data-tripolis="send-data" name="json_content" value="<?php ?>" />
     <div class="field-container">
       <label for="wptripolis_type">create a</label>
-      <select name="wptripolis_type">
+      <select name="wptripolis_type" data-tripolis="type">
         <option value="subscribe"><?php _e('Subscription form','tripolis') ?></option>
         <option value="unsubscribe"><?php _e('Unsubscribe form','tripolis') ?></option>
         <option value="profile"><?php _e('Profile update form','tripolis') ?></option>
@@ -96,7 +96,7 @@ class FormMetaBox
     <div class="field-container" data-tripolis="fields-parent">
       <label for="wptripolis_fields">add fields</label>
       <select name="wptripolis_fields" data-tripolis="fields">
-        <option selected disabled>--choose field--</option>
+        <option value="choose field" selected disabled>--choose field--</option>
            <!--  filled via JS -->
       </select>
    
@@ -104,6 +104,7 @@ class FormMetaBox
             <!--  filled via JS -->
       </ul>
     </div>
+    <button data-save-fields type="button">save</button>
   
 
     <?php
@@ -115,7 +116,6 @@ class FormMetaBox
       remove_action('save_post', __CLASS__ . '::savePost',20,2);
       wp_update_post( [ 'ID' => $post_id, 'post_content' => $_POST['json_content'] ] );
       add_action('save_post', __CLASS__ . '::savePost',20,2);
-
     }
     return true;
   }
