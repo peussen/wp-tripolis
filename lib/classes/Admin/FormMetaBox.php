@@ -49,7 +49,7 @@ class FormMetaBox
             'fieldgroup'    => $fg->id,
             'indexfield'    => $field->key,
             'default'       => $field->defaultValue,
-            'type'          => strtolower($field->type),
+            'type'          => $field->type,
             'options'       => $field->picklistItems,
           ];
         }
@@ -107,7 +107,15 @@ class FormMetaBox
             <!--  filled via JS -->
       </ul>
     </div>
-    <button data-save-fields type="button">save</button>
+
+<button type="button" data-confirm>confirm</button>
+
+    <div id="confirm_msg" style="display:none;">
+       <p>
+            Are you sure you want to switch database?
+       </p>
+       <button type="button" data-confirm>confirm</button>
+    </div>
   
 
     <?php
@@ -126,7 +134,7 @@ class FormMetaBox
   public function do_loadScripts()
   {
     global $_wptripolis;
-
+    add_thickbox();
     wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js');
     wp_enqueue_style('wptripolis-css',$_wptripolis['url'] . 'css/admin.css');
   }

@@ -1,29 +1,23 @@
 (function($){
 
       // This will contain all the fields for the database
-      availableFields = [];
+      var availableFields = [],
+          count = 0; 
 
-    $(document).on('click', '#publish', getFields);
-
-    $("#taxonomy_banner_image").click('click', , function() {                 
-        tb_show("", "filename?TB_iframe=true");
-        return false;
+  function getAvailableObjectbyId(id) 
+  {
+    var field = availableFields.filter(function (obj) {
+      return obj.id == id;
     });
 
-    function getAvailableObjectbyId(id) 
-    {
-      var field = availableFields.filter(function (obj) {
-        return obj.id == id;
-      });
-
-      if ( !field.length ) {
-        return;
-      }
-
-      field = field[0];
-
-      return field;
+    if ( !field.length ) {
+      return;
     }
+
+    field = field[0];
+
+    return field;
+  }
 
   function getFields(e)
   {
@@ -41,7 +35,7 @@
         var field = getAvailableObjectbyId($(this).data('id'));
         fieldsUsed.fields.push(field);
     });
-    // console.log(fieldsUsed);
+
     var magic = JSON.stringify(fieldsUsed);
     $('[data-tripolis="send-data"]').val(magic);
 
@@ -69,39 +63,22 @@
     appendTo('[data-tripolis="fields"]');
   }
 
-  // $('.sortable').sortable().disableSelection();
-
-  $(document.body).on('click', '[data-tripolis-="add-field"]', function() {
-    preventDefault();
-  });
-
-  $(document).on('change' ,'[data-tripolis="db"]', wptripolisGetFields);
-  $(document).on('change','[data-tripolis="fields"]',function() {
-      $selectedFields = $(':selected', this);
-
-      $selectedFields.each(function(key, item){ 
-        item = $(item);
-        addFieldToForm(item.attr('value'),item.html());
-        item.remove();
-      });
-  });
-  $(document).on('click', '[data-selected]',function() {
-      addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
-      $(this).parent().remove();
-  });
 
  //empty fields when selecting new
-  function wptripolisResetFields() {
+  function wptripolisResetFields() 
+  {
     $('[data-tripolis="fields"]').empty();
     $('[data-tripolis="fields-selected"]').empty();
+    tb_remove();
   }
 
   
-  function wptripolisGetFields() {
+  function wptripolisGetFields() 
+  {
 
       wptripolisResetFields();
 
-      var dbSelected = $(this).val(),
+      var dbSelected = $('[data-tripolis="db"]').val(),
           callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + dbSelected;
 
       $.getJSON(callUrl, function(data) {
@@ -118,8 +95,42 @@
           } else {
             addSelectOption(value.id, value.label);
           }
-
         });
       }); 
   }
+
+  function wptripolisConfirmChange() 
+  {
+    count ++; 
+    if (count === 1 ) {
+      wptripolisGetFields();
+    } else {
+      var url = '#TB_inline?inlineId=confirm_msg';
+      tb_show("hell yeah", url, '');     
+    }
+  }
+
+  $(document.body).on('click', '[data-tripolis-="add-field"]', function() {
+    preventDefault();
+  });
+
+  $(document).on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
+  $(document).on('click' ,'[data-confirm]', wptripolisGetFields);
+
+  $(document).on('change','[data-tripolis="fields"]',function() {
+      $selectedFields = $(':selected', this);
+
+      $selectedFields.each(function(key, item){ 
+        item = $(item);
+        addFieldToForm(item.attr('value'),item.html());
+        item.remove();
+      });
+  });
+  $(document).on('click', '[data-selected]',function() {
+      addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
+      $(this).parent().remove();
+  });
+  $(document).on('click', '#publish', getFields);
+
+
 })(jQuery);
