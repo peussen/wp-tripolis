@@ -32,3 +32,16 @@
 #wptripolis-generator select {
 	min-width: 250px;
 }
+
+
+.wptripolis.form .label.required:after {
+	content: " *";
+}
+
+.load {
+	display: none;
+	position: absolute;
+	padding: 5px;
+	height: 18px;
+
+}

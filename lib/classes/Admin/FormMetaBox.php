@@ -63,6 +63,7 @@ class FormMetaBox
   public function do_render()
   {
     global $post;
+    global $_wptripolis;
 
     $dbs = $this->api->ContactDatabase()->all();
 
@@ -94,18 +95,16 @@ class FormMetaBox
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>
       </select>
+      <img class="load" src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
     </div>
 
     <div class="field-container" data-tripolis="fields-parent">
       <label for="wptripolis_fields">add fields</label>
       <select name="wptripolis_fields" data-tripolis="fields">
         <option value="choose field" selected disabled>--choose field--</option>
-           <!--  filled via JS -->
       </select>
    
-      <ul data-tripolis="fields-selected" data-sortable class="sortable">
-            <!--  filled via JS -->
-      </ul>
+      <ul data-tripolis="fields-selected" data-sortable class="sortable"></ul>
     </div>
 
 <button type="button" data-confirm>confirm</button>

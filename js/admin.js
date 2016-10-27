@@ -67,7 +67,7 @@
  //empty fields when selecting new
   function wptripolisResetFields() 
   {
-    $('[data-tripolis="fields"]').empty();
+    $('[data-tripolis="fields"]').not(':first').empty();
     $('[data-tripolis="fields-selected"]').empty();
     tb_remove();
   }
@@ -77,6 +77,9 @@
   {
 
       wptripolisResetFields();
+      var $loadImg = $('.load');
+      $loadImg.show();
+      if ($('[data-tripolis="fields"]'))
 
       var dbSelected = $('[data-tripolis="db"]').val(),
           callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + dbSelected;
@@ -96,6 +99,8 @@
             addSelectOption(value.id, value.label);
           }
         });
+      }).done(function() {
+        $loadImg.hide();
       }); 
   }
 
