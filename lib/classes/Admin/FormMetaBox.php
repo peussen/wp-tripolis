@@ -104,19 +104,46 @@ class FormMetaBox
         <option value="choose field" selected disabled>--choose field--</option>
       </select>
    
-      <ul data-tripolis="fields-selected" data-sortable class="sortable"></ul>
-    </div>
+      <ul data-tripolis="fields-selected" data-sortable class="fields--selected sortable">
+   
+      </ul>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Veld</th>
+                <th>Label</th>
+                <th></th>
+                <th></th>
+              </tr>     
+            </thead>
+            <tbody class="sortable">
+                <tr>
+                  <td ><button class="handle" type="button">move</button></td>
+                  <td>Email</td>
+                  <td><input type="text" name="field-1" data-id="field-1" value="E-mail" readonly></td>
+                  <td><button type="button" data-edit="field-1">edit label</button></td>
+                  <td ><button  type="button">delete</button></td>
+                </tr>
+                <tr>
+                  <td ><button class="handle" type="button">move</button></td>
+                  <td>Voornaam</td>
+                  <td><input type="text" name="field-2" value="Voornaamste" data-id="field-2" readonly></td>
+                  <td><button type="button" data-edit="field-2">edit label</button></td>
+                  <td ><button  type="button">delete</button></td>
+                </tr> 
+            </tbody>
+          </table>
 
-<button type="button" data-confirm>confirm</button>
+    </div>
 
     <div id="confirm_msg" style="display:none;">
        <p>
-            Are you sure you want to switch database?
+         Are you sure you want to switch database?
        </p>
        <button type="button" data-confirm>confirm</button>
     </div>
   
-
     <?php
   }
 

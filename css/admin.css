@@ -33,9 +33,27 @@
 	min-width: 250px;
 }
 
-
 .wptripolis.form .label.required:after {
 	content: " *";
+}
+
+.fields--selected {
+	background: lightgray;
+}
+
+.fields--selected tr {
+	height: 40px;
+	width: 100%;
+}
+
+table {
+	width: 100%;
+	border: 1px solid lightgray;
+}
+
+th {
+	text-align: left;
+	background: 
 }
 
 .load {
@@ -43,5 +61,4 @@
 	position: absolute;
 	padding: 5px;
 	height: 18px;
-
 }

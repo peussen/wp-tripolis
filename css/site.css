@@ -39,6 +39,11 @@
 	display: inline-block;
 	width: 100px;
 }
+
 .wptripolis.form .label.required:after {
 	content: " *";
+}
+
+.load {
+	border: 2px solid green;
 }

@@ -1,4 +1,25 @@
 (function($){
+  var $document = $(document);
+
+  function sortableContent() 
+  {
+    //fix from foliotek for preserving table row width while dragging
+    var fixHelper = function(e, tbody) {  
+      tbody.children().each(function() {  
+          $(this).width($(this).width());  
+        });  
+        return tbody;  
+      }; 
+
+    $('.sortable').sortable({
+      cursor:'move',
+      handle: '.handle',
+      cancel: '',
+      helper: fixHelper
+    }).disableSelection();
+  }
+
+$(document).ready(sortableContent);
 
       // This will contain all the fields for the database
       var availableFields = [],
@@ -52,7 +73,9 @@
     prop('class', field.required ? ' required' : '').
     html(value + (field.required ? '' : '<span data-selected>X</span>')).
     appendTo('[data-tripolis="fields-selected"]');
-    $('.sortable').sortable().disableSelection();
+    $('.sortable').sortable({
+      cursor: 'move'
+    }).disableSelection();
   }
 
   function addSelectOption(id, value)
@@ -115,14 +138,29 @@
     }
   }
 
-  $(document.body).on('click', '[data-tripolis-="add-field"]', function() {
+  $document.on('click', '[data-tripolis-="add-field"]', function() {
     preventDefault();
   });
 
-  $(document).on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
-  $(document).on('click' ,'[data-confirm]', wptripolisGetFields);
+  $document.on('click', '[data-edit]', function() {
+    var $toggle = $( this ),
+        $targetId = $toggle.data('edit'),
+        $target = $('[data-id="' + $targetId + '"]');
+    if ($target.is('[readonly]')) {
+      $toggle.html('save label');
+      $target.prop('readonly',false);
+    }  else {
+      $toggle.html('edit label');
+      $target.prop('readonly',true);
+    }     
+  });
 
-  $(document).on('change','[data-tripolis="fields"]',function() {
+  $document.on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
+
+  $document.on('click' ,'[data-confirm]', wptripolisGetFields);
+
+  $document.on('change','[data-tripolis="fields"]',function() {
+
       $selectedFields = $(':selected', this);
 
       $selectedFields.each(function(key, item){ 
@@ -131,11 +169,16 @@
         item.remove();
       });
   });
-  $(document).on('click', '[data-selected]',function() {
+
+  $document.on('click', '[data-selected]',function() {
       addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
       $(this).parent().remove();
   });
-  $(document).on('click', '#publish', getFields);
+  $document.on('click', '[data-dismiss]',function() {
+      addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
+      $(this).parent().remove();
+  });
 
+  $document.on('click', '#publish', getFields);
 
 })(jQuery);
