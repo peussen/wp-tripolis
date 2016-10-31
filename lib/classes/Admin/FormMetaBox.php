@@ -117,20 +117,20 @@ class FormMetaBox
                 <th></th>
               </tr>     
             </thead>
-            <tbody class="sortable">
-                <tr>
+            <tbody data-tripolis="fields-selected" class="sortable">
+                <tr data-id="field-1" data-value="">
                   <td ><button class="handle" type="button">move</button></td>
                   <td>Email</td>
-                  <td><input type="text" name="field-1" data-id="field-1" value="E-mail" readonly></td>
+                  <td><input type="text" name="field-1"  value="E-mail" readonly></td>
                   <td><button type="button" data-edit="field-1">edit label</button></td>
-                  <td ><button  type="button">delete</button></td>
+                  <td ><button  type="button" data-deselect="field-2">delete</button></td>
                 </tr>
-                <tr>
+                <tr data-selected="" data-value="">
                   <td ><button class="handle" type="button">move</button></td>
                   <td>Voornaam</td>
                   <td><input type="text" name="field-2" value="Voornaamste" data-id="field-2" readonly></td>
                   <td><button type="button" data-edit="field-2">edit label</button></td>
-                  <td ><button  type="button">delete</button></td>
+                  <td ><button  type="button" data-deselect="field-2">delete</button></td>
                 </tr> 
             </tbody>
           </table>

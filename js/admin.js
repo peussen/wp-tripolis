@@ -1,6 +1,10 @@
 (function($){
-  var $document = $(document);
 
+  var $document = $(document),
+      availableFields = [],
+      count = 0; 
+  
+  //initialize sortable
   function sortableContent() 
   {
     //fix from foliotek for preserving table row width while dragging
@@ -19,11 +23,7 @@
     }).disableSelection();
   }
 
-$(document).ready(sortableContent);
-
-      // This will contain all the fields for the database
-      var availableFields = [],
-          count = 0; 
+  $document.ready(sortableContent);
 
   function getAvailableObjectbyId(id) 
   {
@@ -62,10 +62,16 @@ $(document).ready(sortableContent);
 
   }
 
-  function addFieldToForm(id, value)
+  function addSelectTable(id, value)
   {
-    // Zoek veld met ID in available Fields
+    // Search field with ID in available Fields
     var field = getAvailableObjectbyId(id);
+
+
+    $('<tr>').append(
+      $('<td>').html()
+
+      ).appendTo('[data-tripolis="fields-selected"]');
 
     $('<li />').
     data('id',id).
@@ -87,7 +93,7 @@ $(document).ready(sortableContent);
   }
 
 
- //empty fields when selecting new
+ // Empty fields when selecting new database
   function wptripolisResetFields() 
   {
     $('[data-tripolis="fields"]').not(':first').empty();
@@ -95,7 +101,7 @@ $(document).ready(sortableContent);
     tb_remove();
   }
 
-  
+  // Get fields from selected database
   function wptripolisGetFields() 
   {
 
@@ -126,7 +132,7 @@ $(document).ready(sortableContent);
         $loadImg.hide();
       }); 
   }
-
+  // Thickbox notification to confirm changing database
   function wptripolisConfirmChange() 
   {
     count ++; 
@@ -134,7 +140,7 @@ $(document).ready(sortableContent);
       wptripolisGetFields();
     } else {
       var url = '#TB_inline?inlineId=confirm_msg';
-      tb_show("hell yeah", url, '');     
+      tb_show("Let Op!", url, '');     
     }
   }
 
@@ -145,7 +151,7 @@ $(document).ready(sortableContent);
   $document.on('click', '[data-edit]', function() {
     var $toggle = $( this ),
         $targetId = $toggle.data('edit'),
-        $target = $('[data-id="' + $targetId + '"]');
+        $target = $('input[name="' + $targetId + '"]');
     if ($target.is('[readonly]')) {
       $toggle.html('save label');
       $target.prop('readonly',false);
@@ -156,25 +162,19 @@ $(document).ready(sortableContent);
   });
 
   $document.on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
-
   $document.on('click' ,'[data-confirm]', wptripolisGetFields);
-
   $document.on('change','[data-tripolis="fields"]',function() {
 
       $selectedFields = $(':selected', this);
 
       $selectedFields.each(function(key, item){ 
         item = $(item);
-        addFieldToForm(item.attr('value'),item.html());
+        addSelectTable(item.attr('value'),item.html());
         item.remove();
       });
   });
 
-  $document.on('click', '[data-selected]',function() {
-      addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
-      $(this).parent().remove();
-  });
-  $document.on('click', '[data-dismiss]',function() {
+  $document.on('click', '[data-deselect]',function() {
       addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
       $(this).parent().remove();
   });
