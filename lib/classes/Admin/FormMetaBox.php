@@ -89,8 +89,8 @@ class FormMetaBox
     </div>
     <div class="field-container">
       <label for="wptripolis_database">for database</label>
-      <select name="wptripolis_database" data-tripolis="db" id="database">
-        <option value="choose field" selected disabled>--choose field--</option>
+      <select name="wptripolis_database" data-tripolis="db" id="database" required>
+        <option value="" disabled selected hidden>--choose field--</option>
         <?php foreach( $dbs as $db ):?>
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>
@@ -100,8 +100,8 @@ class FormMetaBox
 
     <div class="field-container" data-tripolis="fields-parent">
       <label for="wptripolis_fields">add fields</label>
-      <select name="wptripolis_fields" data-tripolis="fields">
-        <option value="choose field" selected disabled>--choose field--</option>
+      <select name="wptripolis_fields" data-tripolis="fields" required>
+        <option value="" disabled selected hidden>--choose field--</option>
       </select>
    
       <table>
@@ -115,20 +115,6 @@ class FormMetaBox
           </tr>     
         </thead>
         <tbody data-tripolis="fields-selected" class="sortable">
-            <tr data-id="field-1" data-value="">
-              <td ><button class="handle" type="button">move</button></td>
-              <td>Email</td>
-              <td><input type="text" name="field-1"  value="E-mail" readonly></td>
-              <td><button type="button" data-edit="field-1">edit label</button></td>
-              <td ><button  type="button" data-deselect="field-2">delete</button></td>
-            </tr>
-            <tr data-selected="" data-value="">
-              <td ><button class="handle" type="button">move</button></td>
-              <td>Voornaam</td>
-              <td><input type="text" name="field-2" value="Voornaamste" data-id="field-2" readonly></td>
-              <td><button type="button" data-edit="field-2">edit label</button></td>
-              <td ><button  type="button" data-deselect="field-2">delete</button></td>
-            </tr> 
         </tbody>
       </table>
 

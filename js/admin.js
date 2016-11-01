@@ -17,7 +17,7 @@
 
     $('.sortable').sortable({
       cursor:'move',
-      handle: '.handle',
+      handle: '[data-handle]',
       cancel: '',
       helper: fixHelper
     }).disableSelection();
@@ -42,22 +42,26 @@
 
   function getFields(e)
   {
-      //e.preventDefault();
-      // Object containing all fields we wantto use
-      var fieldsUsed = {
-        db: $('[data-tripolis="db"]').val(),
-        type: $('[data-tripolis="type"]').val(),
-        contactgroup:'',
-        fields:[]
+    // Object containing all fields we want to use
+    var formArgs = {
+      db: $('[data-tripolis="db"]').val(),
+      type: $('[data-tripolis="type"]').val(),
+      contactgroup:'',
+      fields:[]
     };
 
-    $('[data-tripolis="fields-selected"] li').each(function() {
+    $('[data-tripolis="fields-selected"] tr').each(function() {
+        id = $(this).data('id');
+        var fieldsUsed = {
+          field: getAvailableObjectbyId(id),
+          label: $(this).data('value')
+        };
 
-        var field = getAvailableObjectbyId($(this).data('id'));
-        fieldsUsed.fields.push(field);
+       
+        formArgs.fields.push(fieldsUsed);
     });
 
-    var magic = JSON.stringify(fieldsUsed);
+    var magic = JSON.stringify(formArgs);
     $('[data-tripolis="send-data"]').val(magic);
 
   }
@@ -71,14 +75,14 @@
     attr('data-value',value).
     attr('data-id',id).
     append(
-      $('<td />').html('<button class="handle" type="button">move</button>'),
+      $('<td />').html('<button class="handle" data-handle type="button">move</button>'),
       $('<td />').html(value),
       $('<td />').html('<input type="text" name="'+ id +'"  value="'+ value +'" readonly>'),
       $('<td />').html('<button type="button" data-edit="'+ id +'">edit label</button>'),
       $('<td />').html((field.required ? '' : '<button  type="button" data-deselect="'+ id +'">delete</button>'))
     ).
     appendTo('[data-tripolis="fields-selected"]');
-    
+
     $('.sortable').sortable({
       cursor: 'move'
     }).disableSelection();
@@ -156,6 +160,13 @@
       $toggle.html('save label');
       $target.prop('readonly',false);
     }  else {
+      console.log($target.val());
+
+      if ($toggle.closest('tr').data('value')) {
+        console.log($toggle.closest('tr').data('value'));
+      }
+
+      $toggle.closest('tr').attr('data-value',$target.val());
       $toggle.html('edit label');
       $target.prop('readonly',true);
     }     
