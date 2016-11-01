@@ -67,18 +67,18 @@
     // Search field with ID in available Fields
     var field = getAvailableObjectbyId(id);
 
-
-    $('<tr>').append(
-      $('<td>').html()
-
-      ).appendTo('[data-tripolis="fields-selected"]');
-
-    $('<li />').
-    data('id',id).
-    data('value',value).
-    prop('class', field.required ? ' required' : '').
-    html(value + (field.required ? '' : '<span data-selected>X</span>')).
+    $('<tr />').
+    attr('data-value',value).
+    attr('data-id',id).
+    append(
+      $('<td />').html('<button class="handle" type="button">move</button>'),
+      $('<td />').html(value),
+      $('<td />').html('<input type="text" name="'+ id +'"  value="'+ value +'" readonly>'),
+      $('<td />').html('<button type="button" data-edit="'+ id +'">edit label</button>'),
+      $('<td />').html((field.required ? '' : '<button  type="button" data-deselect="'+ id +'">delete</button>'))
+    ).
     appendTo('[data-tripolis="fields-selected"]');
+    
     $('.sortable').sortable({
       cursor: 'move'
     }).disableSelection();
@@ -123,7 +123,7 @@
         $.each( availableFields, function(key, value) {
 
           if ( value.required ) {
-            addFieldToForm(value.id, value.label);
+            addSelectTable(value.id, value.label);
           } else {
             addSelectOption(value.id, value.label);
           }
@@ -175,8 +175,8 @@
   });
 
   $document.on('click', '[data-deselect]',function() {
-      addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
-      $(this).parent().remove();
+      addSelectOption($(this).closest('[data-value]').data('id'), $(this).closest('[data-value]').data('value'));
+      $(this).closest('[data-value]').remove();
   });
 
   $document.on('click', '#publish', getFields);
