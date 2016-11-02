@@ -54,7 +54,7 @@
         id = $(this).data('id');
         var fieldsUsed = {
           field: getAvailableObjectbyId(id),
-          label: $(this).data('value')
+          altlabel: $(this).data('value')
         };
 
        
@@ -183,6 +183,7 @@
         addSelectTable(item.attr('value'),item.html());
         item.remove();
       });
+      $( this ).val('default');
   });
 
   $document.on('click', '[data-deselect]',function() {
