@@ -87,10 +87,11 @@ class FormMetaBox
         <option value="profile"><?php _e('Profile update form','tripolis') ?></option>
       </select>
     </div>
+
     <div class="field-container">
       <label for="wptripolis_database">for database</label>
       <select name="wptripolis_database" data-tripolis="db" id="database" required>
-        <option value="" disabled selected>--choose field--</option>
+        <option value="default" disabled selected>--choose field--</option>
         <?php foreach( $dbs as $db ):?>
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>

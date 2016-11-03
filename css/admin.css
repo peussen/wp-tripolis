@@ -62,3 +62,12 @@ th {
 	padding: 5px;
 	height: 18px;
 }
+
+.sortable tr td:first-child,
+.sortable tr td:nth-last-child(-n+2) {
+	width: 74px;
+}
+
+.sortable tr:only-child .handle-js {
+	display: none;
+}

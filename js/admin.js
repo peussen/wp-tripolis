@@ -1,12 +1,16 @@
 (function($){
 
   var $document = $(document),
+      database = '[data-tripolis="db"]',
+      currentDb = $(database).val();
       availableFields = [],
       count = 0; 
+  console.log('initial' + currentDb);
   
   //initialize sortable
   function sortableContent() 
   {
+   var $sortable = $('.sortable');
     //fix from foliotek for preserving table row width while dragging
     var fixHelper = function(e, tbody) {  
       tbody.children().each(function() {  
@@ -15,12 +19,14 @@
         return tbody;  
       }; 
 
-    $('.sortable').sortable({
-      cursor:'move',
-      handle: '[data-handle]',
-      cancel: '',
-      helper: fixHelper
-    }).disableSelection();
+    if ($sortable.children().length > 1) {
+      $('.sortable').sortable({
+        cursor:'move',
+        handle: '.handle-js',
+        cancel: '',
+        helper: fixHelper
+      }).disableSelection();   
+    }
   }
 
   $document.ready(sortableContent);
@@ -40,7 +46,17 @@
     return field;
   }
 
-  function getFields(e)
+  function getSavedData()
+  {
+
+    var data = $('[data-tripolis="send-data"]').val();
+    JSON.parse(data, (key, value) => {
+      console.log(key + " : " + value);
+    });
+
+  }
+
+  function getFields()
   {
     // Object containing all fields we want to use
     var formArgs = {
@@ -75,7 +91,7 @@
     attr('data-value',value).
     attr('data-id',id).
     append(
-      $('<td />').html('<button class="handle" data-handle type="button">move</button>'),
+      $('<td />').html('<button class="handle-js" data-handle type="button">move</button>'),
       $('<td />').html(value),
       $('<td />').html('<input type="text" name="'+ id +'"  value="'+ value +'" readonly>'),
       $('<td />').html('<button type="button" data-edit="'+ id +'">edit label</button>'),
@@ -83,9 +99,7 @@
     ).
     appendTo('[data-tripolis="fields-selected"]');
 
-    $('.sortable').sortable({
-      cursor: 'move'
-    }).disableSelection();
+    sortableContent();
   }
 
   function addSelectOption(id, value)
@@ -108,7 +122,7 @@
   // Get fields from selected database
   function wptripolisGetFields() 
   {
-
+      currentDb = $('[data-tripolis="db"]').val();
       wptripolisResetFields();
       var $loadImg = $('.load');
       $loadImg.show();
@@ -139,7 +153,9 @@
   // Thickbox notification to confirm changing database
   function wptripolisConfirmChange() 
   {
+    console.log('confirmchange' + currentDb);
     count ++; 
+
     if (count === 1 ) {
       wptripolisGetFields();
     } else {
@@ -148,32 +164,37 @@
     }
   }
 
-  $document.on('click', '[data-tripolis-="add-field"]', function() {
-    preventDefault();
-  });
-
   $document.on('click', '[data-edit]', function() {
     var $toggle = $( this ),
         $targetId = $toggle.data('edit'),
         $target = $('input[name="' + $targetId + '"]');
+
     if ($target.is('[readonly]')) {
+
       $toggle.html('save label');
       $target.prop('readonly',false);
-    }  else {
-      console.log($target.val());
 
-      if ($toggle.closest('tr').data('value')) {
-        console.log($toggle.closest('tr').data('value'));
-      }
+    } else {
 
       $toggle.closest('tr').attr('data-value',$target.val());
       $toggle.html('edit label');
       $target.prop('readonly',true);
+
     }     
+  });
+
+  $document.on('focus' ,'[data-tripolis="db"]', function() {
+    currentDb = $( this ).val();
+     console.log('focus' + currentDb);
   });
 
   $document.on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
   $document.on('click' ,'[data-confirm]', wptripolisGetFields);
+  $document.on('click', '#TB_closeWindowButton', function() {
+    $('[data-tripolis="db"]').val(currentDb);
+    console.log('closed' + currentDb);
+
+  });
   $document.on('change','[data-tripolis="fields"]',function() {
 
       $selectedFields = $(':selected', this);
