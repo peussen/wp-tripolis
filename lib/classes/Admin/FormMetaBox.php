@@ -96,7 +96,7 @@ class FormMetaBox
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>
       </select>
-      <img class="load" src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
+      <img class="ajax-loader" data-ajax-load src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
     </div>
 
     <div class="field-container" data-tripolis="fields-parent">
@@ -115,7 +115,7 @@ class FormMetaBox
             <th></th>
           </tr>     
         </thead>
-        <tbody data-tripolis="fields-selected" class="sortable">
+        <tbody data-tripolis="fields-selected" class="sortable-js">
         </tbody>
       </table>
 
@@ -125,6 +125,7 @@ class FormMetaBox
        <p>
          Are you sure you want to switch database?
        </p>
+       <button type="button" data-cancel>cancel</button>
        <button type="button" data-confirm>confirm</button>
     </div>
   

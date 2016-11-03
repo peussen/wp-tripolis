@@ -4,13 +4,15 @@
       database = '[data-tripolis="db"]',
       currentDb = $(database).val();
       availableFields = [],
+      loadImg = '[data-ajax-load]',
       count = 0; 
-  console.log('initial' + currentDb);
+console.log('initial: ' + currentDb);
   
   //initialize sortable
   function sortableContent() 
   {
-   var $sortable = $('.sortable');
+    var $sortable = $('.sortable-js');
+
     //fix from foliotek for preserving table row width while dragging
     var fixHelper = function(e, tbody) {  
       tbody.children().each(function() {  
@@ -20,7 +22,7 @@
       }; 
 
     if ($sortable.children().length > 1) {
-      $('.sortable').sortable({
+      $sortable.sortable({
         cursor:'move',
         handle: '.handle-js',
         cancel: '',
@@ -28,8 +30,6 @@
       }).disableSelection();   
     }
   }
-
-  $document.ready(sortableContent);
 
   function getAvailableObjectbyId(id) 
   {
@@ -50,8 +50,9 @@
   {
 
     var data = $('[data-tripolis="send-data"]').val();
+
     JSON.parse(data, (key, value) => {
-      console.log(key + " : " + value);
+console.log(key + " : " + value);
     });
 
   }
@@ -60,7 +61,7 @@
   {
     // Object containing all fields we want to use
     var formArgs = {
-      db: $('[data-tripolis="db"]').val(),
+      db: $(database).val(),
       type: $('[data-tripolis="type"]').val(),
       contactgroup:'',
       fields:[]
@@ -77,12 +78,11 @@
         formArgs.fields.push(fieldsUsed);
     });
 
-    var magic = JSON.stringify(formArgs);
-    $('[data-tripolis="send-data"]').val(magic);
+    $('[data-tripolis="send-data"]').val(JSON.stringify(formArgs));
 
   }
 
-  function addSelectTable(id, value)
+  function createDbFieldTableRow(id, value)
   {
     // Search field with ID in available Fields
     var field = getAvailableObjectbyId(id);
@@ -102,7 +102,7 @@
     sortableContent();
   }
 
-  function addSelectOption(id, value)
+  function restoreDbFieldOption(id, value)
   {
     $('<option />').
     prop('value',id).
@@ -112,7 +112,7 @@
 
 
  // Empty fields when selecting new database
-  function wptripolisResetFields() 
+  function resetDbFields() 
   {
     $('[data-tripolis="fields"]').not(':first').empty();
     $('[data-tripolis="fields-selected"]').empty();
@@ -120,15 +120,14 @@
   }
 
   // Get fields from selected database
-  function wptripolisGetFields() 
+  function getDbFields() 
   {
-      currentDb = $('[data-tripolis="db"]').val();
-      wptripolisResetFields();
-      var $loadImg = $('.load');
-      $loadImg.show();
+      currentDb = $(database).val();
+      resetDbFields();
+      $(loadImg).css('display', 'inline-block');
       if ($('[data-tripolis="fields"]'))
 
-      var dbSelected = $('[data-tripolis="db"]').val(),
+      var dbSelected = $(database).val(),
           callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + dbSelected;
 
       $.getJSON(callUrl, function(data) {
@@ -141,26 +140,26 @@
         $.each( availableFields, function(key, value) {
 
           if ( value.required ) {
-            addSelectTable(value.id, value.label);
+            createDbFieldTableRow(value.id, value.label);
           } else {
-            addSelectOption(value.id, value.label);
+            restoreDbFieldOption(value.id, value.label);
           }
         });
       }).done(function() {
-        $loadImg.hide();
+        $(loadImg).hide();
       }); 
   }
   // Thickbox notification to confirm changing database
-  function wptripolisConfirmChange() 
+  function confirmDbChange() 
   {
-    console.log('confirmchange' + currentDb);
+console.log('confirm change: ' + currentDb);
     count ++; 
 
     if (count === 1 ) {
-      wptripolisGetFields();
+      getDbFields();
     } else {
       var url = '#TB_inline?inlineId=confirm_msg';
-      tb_show("Let Op!", url, '');     
+      tb_show("Let Op!", url, '');   
     }
   }
 
@@ -183,16 +182,17 @@
     }     
   });
 
-  $document.on('focus' ,'[data-tripolis="db"]', function() {
+  $document.on('focus' ,database, function() {
     currentDb = $( this ).val();
-     console.log('focus' + currentDb);
+console.log('focus and currentBd set to: ' + currentDb);
   });
 
-  $document.on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
-  $document.on('click' ,'[data-confirm]', wptripolisGetFields);
-  $document.on('click', '#TB_closeWindowButton', function() {
+  $document.on('change' ,database, confirmDbChange);
+  $document.on('click' ,'[data-confirm]', getDbFields);
+  $document.on('click', '[data-cancel]', function() {
     $('[data-tripolis="db"]').val(currentDb);
-    console.log('closed' + currentDb);
+    tb_remove();
+console.log('closed and thus unchanged: ' + currentDb);
 
   });
   $document.on('change','[data-tripolis="fields"]',function() {
@@ -201,17 +201,18 @@
 
       $selectedFields.each(function(key, item){ 
         item = $(item);
-        addSelectTable(item.attr('value'),item.html());
+        createDbFieldTableRow(item.attr('value'),item.html());
         item.remove();
       });
       $( this ).val('default');
   });
 
   $document.on('click', '[data-deselect]',function() {
-      addSelectOption($(this).closest('[data-value]').data('id'), $(this).closest('[data-value]').data('value'));
+      restoreDbFieldOption($(this).closest('[data-value]').data('id'), $(this).closest('[data-value]').data('value'));
       $(this).closest('[data-value]').remove();
   });
 
   $document.on('click', '#publish', getFields);
+  $document.ready(sortableContent);
 
 })(jQuery);

@@ -45,6 +45,13 @@
 	height: 40px;
 	width: 100%;
 }
+label {
+	display: inline-block;
+	min-width: 120px;
+}
+select {
+	min-width: 160px;
+}
 
 table {
 	width: 100%;
@@ -56,18 +63,18 @@ th {
 	background: 
 }
 
-.load {
+.ajax-loader {
 	display: none;
 	position: absolute;
 	padding: 5px;
 	height: 18px;
 }
 
-.sortable tr td:first-child,
-.sortable tr td:nth-last-child(-n+2) {
+.sortable-js tr td:first-child,
+.sortable-js tr td:nth-last-child(-n+2) {
 	width: 74px;
 }
 
-.sortable tr:only-child .handle-js {
+.sortable-js tr:only-child .handle-js {
 	display: none;
 }
