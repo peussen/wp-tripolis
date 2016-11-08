@@ -75,7 +75,7 @@ class FormMetaBox
             'fieldgroup'    => $fg->id,
             'indexfield'    => $field->key,
             'default'       => $field->defaultValue,
-            'type'          => strtolower($field->type),
+            'type'          => $field->type,
             'options'       => $field->picklistItems,
           ];
         }
@@ -89,6 +89,7 @@ class FormMetaBox
   public function do_render()
   {
     global $post;
+    global $_wptripolis;
 
     $dbs = $this->api->ContactDatabase()->all();
 
@@ -112,29 +113,47 @@ class FormMetaBox
         <option value="profile"><?php _e('Profile update form','tripolis') ?></option>
       </select>
     </div>
+
     <div class="field-container">
       <label for="wptripolis_database">for database</label>
-      <select name="wptripolis_database" data-tripolis="db" id="database">
+      <select name="wptripolis_database" data-tripolis="db" id="database" required>
+        <option value="default" disabled selected>--choose field--</option>
         <?php foreach( $dbs as $db ):?>
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>
       </select>
+      <img class="load" src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
     </div>
 
     <div class="field-container" data-tripolis="fields-parent">
       <label for="wptripolis_fields">add fields</label>
-      <select name="wptripolis_fields" data-tripolis="fields">
-        <option value="choose field" selected disabled>--choose field--</option>
-           <!--  filled via JS -->
+      <select name="wptripolis_fields" data-tripolis="fields" required>
+        <option value="default" disabled selected>--choose field--</option>
       </select>
    
-      <ul data-tripolis="fields-selected" data-sortable class="sortable">
-            <!--  filled via JS -->
-      </ul>
-    </div>
-    <button data-save-fields type="button">save</button>
-  
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>Veld</th>
+            <th>Label</th>
+            <th></th>
+            <th></th>
+          </tr>     
+        </thead>
+        <tbody data-tripolis="fields-selected" class="sortable">
+        </tbody>
+      </table>
 
+    </div>
+
+    <div id="confirm_msg" style="display:none;">
+       <p>
+         Are you sure you want to switch database?
+       </p>
+       <button type="button" data-confirm>confirm</button>
+    </div>
+  
     <?php
   }
 
@@ -151,7 +170,7 @@ class FormMetaBox
   public function do_loadScripts()
   {
     global $_wptripolis;
-
+    add_thickbox();
     wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js');
     wp_enqueue_style('wptripolis-css',$_wptripolis['url'] . 'css/admin.css');
   }

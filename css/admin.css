@@ -32,3 +32,42 @@
 #wptripolis-generator select {
 	min-width: 250px;
 }
+
+.wptripolis.form .label.required:after {
+	content: " *";
+}
+
+.fields--selected {
+	background: lightgray;
+}
+
+.fields--selected tr {
+	height: 40px;
+	width: 100%;
+}
+
+table {
+	width: 100%;
+	border: 1px solid lightgray;
+}
+
+th {
+	text-align: left;
+	background: 
+}
+
+.load {
+	display: none;
+	position: absolute;
+	padding: 5px;
+	height: 18px;
+}
+
+.sortable tr td:first-child,
+.sortable tr td:nth-last-child(-n+2) {
+	width: 74px;
+}
+
+.sortable tr:only-child .handle-js {
+	display: none;
+}

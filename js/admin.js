@@ -1,63 +1,105 @@
 (function($){
 
-  var $selectboxFields = $('[data-tripolis="fields"]'),
-      $listFields = $('[data-tripolis="fields-selected"]'),
+  var $document = $(document),
+      database = '[data-tripolis="db"]',
+      currentDb = $(database).val();
+      availableFields = [],
+      count = 0; 
+  console.log('initial' + currentDb);
+  
+  //initialize sortable
+  function sortableContent() 
+  {
+   var $sortable = $('.sortable');
+    //fix from foliotek for preserving table row width while dragging
+    var fixHelper = function(e, tbody) {  
+      tbody.children().each(function() {  
+          $(this).width($(this).width());  
+        });  
+        return tbody;  
+      }; 
 
-      // This will contain all the fields for the database
-      availableFields = [];
+    if ($sortable.children().length > 1) {
+      $('.sortable').sortable({
+        cursor:'move',
+        handle: '.handle-js',
+        cancel: '',
+        helper: fixHelper
+      }).disableSelection();   
+    }
+  }
 
-    $(document).on('click', '#publish', getFields);
+  $document.ready(sortableContent);
 
-    function getAvailableObjectbyId(id) 
-    {
-      var field = availableFields.filter(function (obj) {
-        return obj.id == id;
-      });
+  function getAvailableObjectbyId(id) 
+  {
+    var field = availableFields.filter(function (obj) {
+      return obj.id == id;
+    });
 
-      if ( !field.length ) {
-        return;
-      }
-
-      field = field[0];
-
-      return field;
+    if ( !field.length ) {
+      return;
     }
 
-  function getFields(e)
+    field = field[0];
+
+    return field;
+  }
+
+  function getSavedData()
   {
-      //e.preventDefault();
-      // Object containing all fields we wantto use
-      var fieldsUsed = {
-        db: $('[data-tripolis="db"]').val(),
-        type: $('[data-tripolis="type"]').val(),
-        contactgroup:'',
-        fields:[]
+
+    var data = $('[data-tripolis="send-data"]').val();
+    JSON.parse(data, (key, value) => {
+      console.log(key + " : " + value);
+    });
+
+  }
+
+  function getFields()
+  {
+    // Object containing all fields we want to use
+    var formArgs = {
+      db: $('[data-tripolis="db"]').val(),
+      type: $('[data-tripolis="type"]').val(),
+      contactgroup:'',
+      fields:[]
     };
 
-    $('[data-tripolis="fields-selected"] li').each(function() {
+    $('[data-tripolis="fields-selected"] tr').each(function() {
+        id = $(this).data('id');
+        var fieldsUsed = {
+          field: getAvailableObjectbyId(id),
+          altlabel: $(this).data('value')
+        };
 
-        var field = getAvailableObjectbyId($(this).data('id'));
-        fieldsUsed.fields.push(field);
+       
+        formArgs.fields.push(fieldsUsed);
     });
-    // console.log(fieldsUsed);
-    var magic = JSON.stringify(fieldsUsed);
+
+    var magic = JSON.stringify(formArgs);
     $('[data-tripolis="send-data"]').val(magic);
 
   }
 
-  function addFieldToForm(id, value)
+  function addSelectTable(id, value)
   {
-    // Zoek veld met ID in available Fields
+    // Search field with ID in available Fields
     var field = getAvailableObjectbyId(id);
 
-    $('<li />').
-    data('id',id).
-    data('value',value).
-    prop('class', field.required ? ' required' : '').
-    html(value + (field.required ? '' : '<span data-selected>X</span>')).
+    $('<tr />').
+    attr('data-value',value).
+    attr('data-id',id).
+    append(
+      $('<td />').html('<button class="handle-js" data-handle type="button">move</button>'),
+      $('<td />').html(value),
+      $('<td />').html('<input type="text" name="'+ id +'"  value="'+ value +'" readonly>'),
+      $('<td />').html('<button type="button" data-edit="'+ id +'">edit label</button>'),
+      $('<td />').html((field.required ? '' : '<button  type="button" data-deselect="'+ id +'">delete</button>'))
+    ).
     appendTo('[data-tripolis="fields-selected"]');
-    $('.sortable').sortable().disableSelection();
-    console.log($listFields);
+
+    sortableContent();
   }
 
   function addSelectOption(id, value)
@@ -68,39 +110,25 @@
     appendTo('[data-tripolis="fields"]');
   }
 
-  $('.sortable').sortable().disableSelection();
 
-  $(document.body).on('click', '[data-tripolis-="add-field"]', function() {
-    preventDefault();
-  });
-
-  $(document).on('change' ,'[data-tripolis="db"]', wptripolisGetFields);
-  $(document).on('change','[data-tripolis="fields"]',function() {
-      $selectedFields = $(':selected', this);
-
-      $selectedFields.each(function(key, item){ 
-        item = $(item);
-        addFieldToForm(item.attr('value'),item.html());
-        item.remove();
-      });
-  });
-  $(document).on('click', '[data-selected]',function() {
-      addSelectOption($(this).parent().data('id'), $(this).parent().data('value'));
-      $(this).parent().remove();
-  });
-
- //empty fields when selecting new
-  function wptripolisResetFields() {
-    $selectboxFields.empty();
+ // Empty fields when selecting new database
+  function wptripolisResetFields() 
+  {
+    $('[data-tripolis="fields"]').not(':first').empty();
     $('[data-tripolis="fields-selected"]').empty();
+    tb_remove();
   }
 
-  
-  function wptripolisGetFields() {
-
+  // Get fields from selected database
+  function wptripolisGetFields() 
+  {
+      currentDb = $('[data-tripolis="db"]').val();
       wptripolisResetFields();
+      var $loadImg = $('.load');
+      $loadImg.show();
+      if ($('[data-tripolis="fields"]'))
 
-      var dbSelected = $(this).val(),
+      var dbSelected = $('[data-tripolis="db"]').val(),
           callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + dbSelected;
 
       $.getJSON(callUrl, function(data) {
@@ -113,13 +141,77 @@
         $.each( availableFields, function(key, value) {
 
           if ( value.required ) {
-            addFieldToForm(value.id, value.label);
+            addSelectTable(value.id, value.label);
           } else {
             addSelectOption(value.id, value.label);
           }
-
         });
+      }).done(function() {
+        $loadImg.hide();
       }); 
   }
+  // Thickbox notification to confirm changing database
+  function wptripolisConfirmChange() 
+  {
+    console.log('confirmchange' + currentDb);
+    count ++; 
+
+    if (count === 1 ) {
+      wptripolisGetFields();
+    } else {
+      var url = '#TB_inline?inlineId=confirm_msg';
+      tb_show("Let Op!", url, '');     
+    }
+  }
+
+  $document.on('click', '[data-edit]', function() {
+    var $toggle = $( this ),
+        $targetId = $toggle.data('edit'),
+        $target = $('input[name="' + $targetId + '"]');
+
+    if ($target.is('[readonly]')) {
+
+      $toggle.html('save label');
+      $target.prop('readonly',false);
+
+    } else {
+
+      $toggle.closest('tr').attr('data-value',$target.val());
+      $toggle.html('edit label');
+      $target.prop('readonly',true);
+
+    }     
+  });
+
+  $document.on('focus' ,'[data-tripolis="db"]', function() {
+    currentDb = $( this ).val();
+     console.log('focus' + currentDb);
+  });
+
+  $document.on('change' ,'[data-tripolis="db"]', wptripolisConfirmChange);
+  $document.on('click' ,'[data-confirm]', wptripolisGetFields);
+  $document.on('click', '#TB_closeWindowButton', function() {
+    $('[data-tripolis="db"]').val(currentDb);
+    console.log('closed' + currentDb);
+
+  });
+  $document.on('change','[data-tripolis="fields"]',function() {
+
+      $selectedFields = $(':selected', this);
+
+      $selectedFields.each(function(key, item){ 
+        item = $(item);
+        addSelectTable(item.attr('value'),item.html());
+        item.remove();
+      });
+      $( this ).val('default');
+  });
+
+  $document.on('click', '[data-deselect]',function() {
+      addSelectOption($(this).closest('[data-value]').data('id'), $(this).closest('[data-value]').data('value'));
+      $(this).closest('[data-value]').remove();
+  });
+
+  $document.on('click', '#publish', getFields);
 
 })(jQuery);
