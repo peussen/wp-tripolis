@@ -2,11 +2,13 @@
 
   var $document = $(document),
       database = '[data-tripolis="db"]',
+      type = '[data-tripolis="type"]',
+      dbFields = '[data-tripolis="fields"]',
       currentDb = $(database).val();
       availableFields = [],
       loadImg = '[data-ajax-load]',
       count = 0; 
-console.log('initial: ' + currentDb);
+
   
   //initialize sortable
   function sortableContent() 
@@ -51,10 +53,28 @@ console.log('initial: ' + currentDb);
 
     var data = $('[data-tripolis="send-data"]').val();
 
-    JSON.parse(data, (key, value) => {
-console.log(key + " : " + value);
-    });
+    var form = JSON.parse(data);
 
+    if (form.type) {
+      $(type).val(form.type);
+    }
+    if (form.db) {
+     $(database).val(form.db);
+    }
+    getDbFields();
+
+    var savedFields = form.fields;
+
+    if (form.fields) {
+      $.each( savedFields, function(key, value) {
+        var fieldLabel = value.altlabel,
+        fieldId = value.field.id,
+        fieldValue = value.field.value;
+
+        $('option[value="' + fieldId + '"]', dbFields).prop('selected', true);   
+      });
+    }
+    addSelectedToTable();
   }
 
   function getFields()
@@ -73,7 +93,6 @@ console.log(key + " : " + value);
           field: getAvailableObjectbyId(id),
           altlabel: $(this).data('value')
         };
-
        
         formArgs.fields.push(fieldsUsed);
     });
@@ -82,11 +101,25 @@ console.log(key + " : " + value);
 
   }
 
+  function addSelectedToTable() 
+  {
+    $selectedFields = $(':selected', dbFields);
+
+    $selectedFields.each(function(key, item){ 
+      item = $(item);
+      createDbFieldTableRow(item.attr('value'),item.html());
+      item.remove();
+    });
+
+    $(dbFields).val('default');
+
+  }
+
   function createDbFieldTableRow(id, value)
   {
     // Search field with ID in available Fields
     var field = getAvailableObjectbyId(id);
-
+console.log(field);
     $('<tr />').
     attr('data-value',value).
     attr('data-id',id).
@@ -152,7 +185,7 @@ console.log(key + " : " + value);
   // Thickbox notification to confirm changing database
   function confirmDbChange() 
   {
-console.log('confirm change: ' + currentDb);
+
     count ++; 
 
     if (count === 1 ) {
@@ -162,6 +195,13 @@ console.log('confirm change: ' + currentDb);
       tb_show("Let Op!", url, '');   
     }
   }
+
+  function initForm()
+  {
+    sortableContent();
+    getSavedData();
+  }
+
 
   $document.on('click', '[data-edit]', function() {
     var $toggle = $( this ),
@@ -184,7 +224,7 @@ console.log('confirm change: ' + currentDb);
 
   $document.on('focus' ,database, function() {
     currentDb = $( this ).val();
-console.log('focus and currentBd set to: ' + currentDb);
+
   });
 
   $document.on('change' ,database, confirmDbChange);
@@ -192,20 +232,9 @@ console.log('focus and currentBd set to: ' + currentDb);
   $document.on('click', '[data-cancel]', function() {
     $('[data-tripolis="db"]').val(currentDb);
     tb_remove();
-console.log('closed and thus unchanged: ' + currentDb);
-
   });
-  $document.on('change','[data-tripolis="fields"]',function() {
 
-      $selectedFields = $(':selected', this);
-
-      $selectedFields.each(function(key, item){ 
-        item = $(item);
-        createDbFieldTableRow(item.attr('value'),item.html());
-        item.remove();
-      });
-      $( this ).val('default');
-  });
+  $document.on('change', dbFields , addSelectedToTable);
 
   $document.on('click', '[data-deselect]',function() {
       restoreDbFieldOption($(this).closest('[data-value]').data('id'), $(this).closest('[data-value]').data('value'));
@@ -213,6 +242,6 @@ console.log('closed and thus unchanged: ' + currentDb);
   });
 
   $document.on('click', '#publish', getFields);
-  $document.ready(sortableContent);
+  $document.ready(initForm);
 
 })(jQuery);

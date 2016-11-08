@@ -99,6 +99,14 @@ class FormMetaBox
       <img class="ajax-loader" data-ajax-load src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
     </div>
 
+    <div class="field-container">
+      <label for="wptripolis_type">add to contactgroup</label>
+      <select name="wptripolis_contactgroup" data-tripolis="contactgroup">
+
+      </select>
+    </div>
+
+
     <div class="field-container" data-tripolis="fields-parent">
       <label for="wptripolis_fields">add fields</label>
       <select name="wptripolis_fields" data-tripolis="fields" required>
@@ -146,7 +154,7 @@ class FormMetaBox
   {
     global $_wptripolis;
     add_thickbox();
-    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js');
+    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js',false,['jquery-ui-sortable'],false, true);
     wp_enqueue_style('wptripolis-css',$_wptripolis['url'] . 'css/admin.css');
   }
 
