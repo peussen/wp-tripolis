@@ -15,6 +15,32 @@ class FormMetaBox
 
   }
 
+  public function do_getContactGroups()
+  {
+    $db = (isset($_GET['db']) ? $_GET['db'] : null);
+
+    if ( $db ) {
+      $contacts = [];
+      $response = $this->api->ContactGroup()->all($db);
+
+      foreach( $response as $contactgroup ) {
+        $contacts[ucfirst(strtolower($contactgroup->type))][$contactgroup->id] = $contactgroup->label;
+      }
+      $response = [
+        'status'  => true,
+        'contacts'=> $contacts
+      ];
+    } else {
+      $response = [
+        'status' => false,
+        'message'=> 'No database selected'
+      ];
+    }
+
+    echo json_encode($response);
+    exit();
+  }
+
   public function do_getDatabaseFields()
   {
     $db = (isset($_GET['db']) ? $_GET['db'] : null);
@@ -168,6 +194,7 @@ class FormMetaBox
   static public function boot()
   {
     add_action('wp_ajax_wptripolis_get_database_fields', __CLASS__ . '::getDatabaseFields');
+    add_action('wp_ajax_wptripolis_get_contact_groups', __CLASS__ . '::getContactGroups');
     add_action('save_post', __CLASS__ . '::savePost',20,2);
     add_action('admin_enqueue_scripts', __CLASS__ . '::loadScripts');
   }
