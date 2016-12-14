@@ -28,7 +28,9 @@ class FormMetaBox
       }
       $response = [
         'status'  => true,
-        'contacts'=> $contacts
+        'contacts'=> isset($contacts['Subscription']) ? $contacts['Subscription'] : new stdObject
+        // 'contacts'=> $contacts
+
       ];
     } else {
       $response = [
@@ -93,6 +95,7 @@ class FormMetaBox
 
     $dbs = $this->api->ContactDatabase()->all();
 
+
     // $db = new \stdClass();
     // $db->id = 'a';
     // $db->label = "Dummy";
@@ -108,6 +111,7 @@ class FormMetaBox
     <div class="field-container">
       <label for="wptripolis_type">create a</label>
       <select name="wptripolis_type" data-tripolis="type">
+        <option value="default" disabled selected>--choose field--</option>
         <option value="subscribe"><?php _e('Subscription form','tripolis') ?></option>
         <option value="unsubscribe"><?php _e('Unsubscribe form','tripolis') ?></option>
         <option value="profile"><?php _e('Profile update form','tripolis') ?></option>
@@ -125,13 +129,22 @@ class FormMetaBox
       <img class="ajax-loader" data-ajax-load src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
     </div>
 
-    <div class="field-container">
-      <label for="wptripolis_type">add to contactgroup</label>
-      <select name="wptripolis_contactgroup" data-tripolis="contactgroup">
-
+    <div class="field-container" data-tripolis="unsubscribe-action">
+      <label for="wptripolis_action">What change should be made</label>
+      <select name="wptripolis_action">
+        <option value="default" disabled selected>--choose field--</option>
+        <option value="add">remove from all subscriptions</option>
+        <option value="remove">remove from specific subscription group</option>
+        <option value="delete">delete from database</option>
       </select>
     </div>
 
+    <div class="field-container" data-tripolis="contactgroup">
+      <label for="wptripolis_contactgroup">apply changes to subscription group</label>
+      <select name="wptripolis_contactgroup">
+        <option value="default" disabled selected>--choose field--</option>
+      </select>
+    </div>
 
     <div class="field-container" data-tripolis="fields-parent">
       <label for="wptripolis_fields">add fields</label>
@@ -152,6 +165,11 @@ class FormMetaBox
         <tbody data-tripolis="fields-selected" class="sortable-js">
         </tbody>
       </table>
+
+    </div>
+
+    <div class="field-container" data-tripolis="generate-form">
+
 
     </div>
 

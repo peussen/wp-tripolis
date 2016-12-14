@@ -1,15 +1,20 @@
 (function($){
 
-  var $document = $(document),
-      database = '[data-tripolis="db"]',
-      type = '[data-tripolis="type"]',
-      dbFields = '[data-tripolis="fields"]',
-      currentDb = $(database).val();
-      availableFields = [],
-      loadImg = '[data-ajax-load]',
-      count = 0; 
+  var $document          = $(document),
+  database               = '[data-tripolis="db"]',
+  type                   = '[data-tripolis="type"]',
+  dbFields               = '[data-tripolis="fields"]',
+  contactGroup           = '[data-tripolis="contactgroup"] select',
+  action                 = '[data-tripolis="unsubscribe-action"] select'
+  currentDb              = $(database).val();
+  availableFields        = [],
+  availableContactGroups = [],
+  loadImg                = '[data-ajax-load]',
+  count                  = 0;
 
   
+  //
+
   //initialize sortable
   function sortableContent() 
   {
@@ -25,10 +30,10 @@
 
     if ($sortable.children().length > 1) {
       $sortable.sortable({
-        cursor:'move',
-        handle: '.handle-js',
-        cancel: '',
-        helper: fixHelper
+        cursor : 'move',
+        handle : '.handle-js',
+        cancel : '',
+        helper : fixHelper
       }).disableSelection();   
     }
   }
@@ -52,9 +57,11 @@
   {
 
     var data = $('[data-tripolis="send-data"]').val();
+    // console.log(data);
 
     if (data) {
       var form = JSON.parse(data);
+      console.log(form);
     }
 
     if (form.type) {
@@ -63,6 +70,11 @@
     if (form.db) {
      $(database).val(form.db);
     }
+    if (form.contactgroup) {
+     $(contactGroup).val(form.contactgroup);
+    }
+
+
     getDbFields(false, function() {
       count ++;
       var savedFields = form.fields;
@@ -73,12 +85,71 @@
           fieldId = value.field.id,
           fieldValue = value.field.value;
           $('option[value="' + fieldId + '"]', dbFields).prop('selected', true);
-          addSelectedToTable();   
+          addSelectedToTable();  
+          // console.log(value.field.type);
+          
+          //all available field types, check which one it is
+          var fieldType = '';
+          switch (value.field.type) {
+            case 'STRING':
+              fieldType = 'text';
+            break;
+            case 'INTEGER':
+              fieldType = 'number';
+            break;
+            case 'EMAIL':
+              fieldType = 'e-mail';
+            break;
+            case 'BOOLEAN':
+              fieldType = 'checkbox';
+            break;
+            case 'DECIMAL':
+              fieldType = 'number';
+            break;
+            case 'DATE':
+              fieldType = 'date';
+            break;
+            case 'DATETIME':
+              fieldType = 'datetime';
+            break;
+            case 'PICKLIST':
+              fieldType = 'select';
+              selectOptions = value.field.options.picklistItem;
+            break;
+            case 'MOBILE':
+              fieldType = 'tel';
+            break;
+            default: 
+              fieldType = 'text';
+            break;
+          }
+          if ($.inArray(fieldType, ['text', 'e-mail', 'date', 'datetime', 'number', 'tel', 'checkbox']) != -1) {
+            console.log('input: ', fieldType);
+            formOutput = $('<input />').prop({
+                            'type': fieldType,
+                            'name': value.field.label,
+                          });
+            
+          } else if (fieldType === 'select') {
+             console.log('select: ', fieldType);
+             formOutput = $('<select />').prop('name', value.field.label);
+             $.each(selectOptions, function(key, value) {
+              $('<option />').
+              prop('value', value.key).
+              html(value.value).
+              appendTo(formOutput);
+            });      
+          } else {
+
+          }
+          
+
+          $('[data-tripolis="generate-form"]').append(
+            $('<label>').html(fieldLabel),
+            formOutput
+            );
         });
-
       }
-
-      console.log($(dbFields).val());
     });
   }
 
@@ -87,8 +158,8 @@
     // Object containing all fields we want to use
     var formArgs = {
       db: $(database).val(),
-      type: $('[data-tripolis="type"]').val(),
-      contactgroup:'',
+      type: $(type).val(),
+      contactgroup:$(contactGroup).val(),
       fields:[]
     };
 
@@ -153,10 +224,10 @@
   {
 
     $(dbFields + ' option').not(':eq(0)').remove();
+    $(contactGroup + ' option').not(':eq(0)').remove();
     $('[data-tripolis="fields-selected"]').empty();
 
     tb_remove();
-    console.log('reset fields');
   }
 
   // Get fields from selected database
@@ -165,42 +236,90 @@
     if (required == undefined) {
       required = true;
     }
-      resetDbFields();
-      currentDb = $(database).val();
-      $(loadImg).css('display', 'inline-block');
-      if ($(dbFields))
+    //reset options in selectbox and rows 
+    resetDbFields();
 
-      var dbSelected = $(database).val(),
-          callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + dbSelected;
+    var currentDb = $(database).val();
+    // loadimg positioning 
+    $(loadImg).css('display', 'inline-block');
 
-      $.getJSON(callUrl, function(data) {
+    var callUrl = ajaxurl + '?action=wptripolis_get_database_fields&db=' + currentDb;
 
-        if ( data.fields ) {
-          availableFields = data.fields;
+    $.getJSON(callUrl, function(data) {
+
+      if ( data.fields ) {
+        availableFields = data.fields;
+      }
+
+      //put all the fields in the selectbox
+      $.each( availableFields, function(key, value) {
+
+        if ( required && value.required) { 
+          //make table row for required fields      
+          createDbFieldTableRow(value.id, value.label);
+        } else {
+          //restore all other fields as options in the selectbox
+          restoreDbFieldOption(value.id, value.label);
         }
+      });
 
-        //put all the fields in the selectbox
-        $.each( availableFields, function(key, value) {
+    }).done(function() {
+      //hide laodimage when done.
+      $(loadImg).hide();
+      //do other stuff when done
+      if ( onReady !== undefined ) {
+        onReady();
+      }
+    }); 
 
-          if ( required && value.required) {        
-            createDbFieldTableRow(value.id, value.label);
-          } else {
-            restoreDbFieldOption(value.id, value.label);
-          }
-        });
-
-      }).done(function() {
-        $(loadImg).hide();
-
-        if ( onReady !== undefined ) {
-          onReady();
-        }
-      }); 
+    getContactGroups();
   }
+
+  function getContactGroups()
+  {
+    var currentDb = $(database).val(),
+        type      = $(type).val(),
+        callUrl = ajaxurl + '?action=wptripolis_get_contact_groups&db=' + currentDb + '&type=' + type;
+
+    $.getJSON(callUrl, function(data) {
+      availableContactGroups = data.contacts;
+      // console.log(availableContactGroups);
+
+      $.each( availableContactGroups, function(key, value) {
+
+          $('<option />').
+          prop('value', value).
+          prop('data-id', key).
+          html(value).
+          appendTo($(contactGroup));
+      });
+    });
+  }
+
+  function showContactGroups()
+  {
+    if ($(type).val() == 'unsubscribe') {
+      $action = $('[data-tripolis="unsubscribe-action"]');
+      $action.show();
+
+
+    }
+  }
+
+  function handleUnsubscribe()
+  {
+
+    if ($(action).val() == 'add') {
+    // console.log($(contactGroup + ' label'));
+      $(contactGroup + ' label').html('select your unsubscribe group');
+
+    }
+
+  }
+
   // Thickbox notification to confirm changing database
   function confirmDbChange() 
   {
-
     count ++; 
 
     if (count === 1 ) {
@@ -241,7 +360,8 @@
     currentDb = $( this ).val();
 
   });
-
+  $document.on('change', action, handleUnsubscribe);
+  $document.on('change', type, showContactGroups);
   $document.on('change' ,database, confirmDbChange);
   $document.on('click' ,'[data-confirm]', getDbFields);
   $document.on('click', '[data-cancel]', function() {
@@ -250,7 +370,6 @@
   });
 
   $document.on('change', dbFields , addSelectedToTable);
-
   $document.on('click', '[data-deselect]',function() {
       restoreDbFieldOption($(this).closest('[data-value]').data('id'), $(this).closest('[data-value]').data('value'));
       $(this).closest('[data-value]').remove();

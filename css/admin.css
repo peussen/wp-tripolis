@@ -55,6 +55,7 @@ select {
 
 table {
 	width: 100%;
+	margin-top: 50px;
 	border: 1px solid lightgray;
 }
 
@@ -76,5 +77,9 @@ th {
 }
 
 .sortable-js tr:only-child .handle-js {
+	display: none;
+}
+
+[data-tripolis="unsubscribe-action"] {
 	display: none;
 }
