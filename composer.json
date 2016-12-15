@@ -32,5 +32,8 @@
     "harperjones/tripolis-api": "dev-master",
     "pimple/pimple": "~3.0",
     "michaeluno/admin-page-framework": "^3.7"
+  },
+  "require-dev": {
+    "johnpbloch/wordpress": "^4.6.1"
   }
 }
