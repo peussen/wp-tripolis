@@ -14,8 +14,12 @@ if ( !defined("ABSPATH")) {
 	die("Not your cup of tea");
 }
 
-define("WPTRIPOLIS_REQUIREMENTS_FULLFILLED",version_compare(PHP_VERSION, '5.6.0', '>='));
 define("WPTRIPOLIS_BASEDIR",__DIR__);
+define("WPTRIPOLIS_REQUIREMENTS_FULLFILLED",
+  version_compare(PHP_VERSION, '5.6.0', '>=') &&
+  class_exists('SoapClient') &&
+  defined('SOAP_SINGLE_ELEMENT_ARRAYS')
+);
 
 // Minimum requirements for systems (PHP version 5.6 required) for traits/short array notation
 // lower than 5.4
@@ -23,7 +27,7 @@ if (!WPTRIPOLIS_REQUIREMENTS_FULLFILLED) {
 	add_action('admin_notices', function() {
 		?>
 		<div class="error">
-			<p><?php echo sprintf(__('The plugin %s requires PHP version 5.4. To avoid errors on your system, the plugin is not fully activated.','tripols'),basename(__DIR__)) ?></p>
+			<p><?php echo sprintf(__('The plugin %s requires PHP version 5.4 with SOAP Support. To avoid errors on your system, the plugin is not fully activated.','tripols'),basename(__DIR__)) ?></p>
 		</div>
 	<?php
 	});

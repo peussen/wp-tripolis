@@ -2,7 +2,7 @@
 
 global $wp_version;
 
-if (version_compare($wp_version,'3.9.0','<')) {
+if (version_compare($wp_version,'4.6.0','<')) {
   add_action('admin_notices',function(){
     global $wp_version;
     ?>

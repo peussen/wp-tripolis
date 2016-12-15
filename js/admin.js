@@ -50,7 +50,7 @@
   {
 
     var data = $('[data-tripolis="send-data"]').val();
-    JSON.parse(data, (key, value) => {
+    JSON.parse(data, function(key, value) {
       console.log(key + " : " + value);
     });
 

@@ -171,7 +171,7 @@ class FormMetaBox
   {
     global $_wptripolis;
     add_thickbox();
-    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js');
+    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js',['jquery']);
     wp_enqueue_style('wptripolis-css',$_wptripolis['url'] . 'css/admin.css');
   }
 

@@ -52,6 +52,7 @@ class FormPostType
 
     add_action('load-post.php', __CLASS__ . '::setupMetaBox');
     add_action('load-post-new.php',__CLASS__ . '::setupMetaBox');
+    add_action('manage_wptripolis-form_custom_column', __CLASS__ . '::addShortCodeColumn',10,2);
   }
 
   static public function setupMetaBox()
@@ -62,5 +63,10 @@ class FormPostType
   static public function createMetaBox()
   {
     add_meta_box('wptripolis-editor',__('Form','tripolis'), 'WPTripolis\\Admin\\FormMetaBox::render','wptripolis-form', 'normal', 'high');
+  }
+
+  static public function addShortCodeColumn($column,$postId)
+  {
+
   }
 }
