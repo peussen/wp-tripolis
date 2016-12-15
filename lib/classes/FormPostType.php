@@ -81,7 +81,7 @@ class FormPostType
   static public function fillShortCodeColumn($column,$post_id)
   {
     if ( $column === 'wptripolis_shortcode' ) {
-      echo '<input type="text" readonly="readonly" onfocus="this.select()" value="[wptripolis-form form=' . $post_id . '" class="large-text code">';
+      echo '<input type="text" readonly="readonly" onfocus="this.select()" value="[wptripolis-form form=' . $post_id . ']" class="large-text code">';
     }
   }
 }
