@@ -7,7 +7,6 @@
 
 namespace WPTripolis\Wordpress;
 
-fdsfdsfdsfsd
 
 /**
  * Wrapper for creating a utility page

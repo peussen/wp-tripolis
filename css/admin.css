@@ -83,3 +83,19 @@ th {
 [data-tripolis="unsubscribe-action"] {
 	display: none;
 }
+
+
+/*
+ * List view,
+ * I know, nothing is that important...
+ */
+
+.wptripolis_shortcode input {
+	background: transparent;
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+.wptripolis_shortcode input:focus {
+	border: 1px solid #5b9dd9 !important;
+}

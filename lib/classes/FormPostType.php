@@ -52,7 +52,9 @@ class FormPostType
 
     add_action('load-post.php', __CLASS__ . '::setupMetaBox');
     add_action('load-post-new.php',__CLASS__ . '::setupMetaBox');
-    add_action('manage_wptripolis-form_custom_column', __CLASS__ . '::addShortCodeColumn',10,2);
+    add_action('manage_wptripolis-form_posts_custom_column', __CLASS__ . '::fillShortCodeColumn',10,2);
+
+    add_filter('manage_wptripolis-form_posts_columns',__CLASS__ . '::addShortCodeColumn');
   }
 
   static public function setupMetaBox()
@@ -65,8 +67,21 @@ class FormPostType
     add_meta_box('wptripolis-editor',__('Form','tripolis'), 'WPTripolis\\Admin\\FormMetaBox::render','wptripolis-form', 'normal', 'high');
   }
 
-  static public function addShortCodeColumn($column,$postId)
+  static public function addShortCodeColumn($columns)
   {
+      $lastColKey =  key( array_slice( $columns, -1, 1, TRUE ) );
+      $lastColVal = array_pop($columns);
 
+      $columns['wptripolis_shortcode'] = __('Shortcode','wptripolis');
+      $columns[$lastColKey] = $lastColVal;
+
+      return $columns;
+  }
+
+  static public function fillShortCodeColumn($column,$post_id)
+  {
+    if ( $column === 'wptripolis_shortcode' ) {
+      echo '<input type="text" readonly="readonly" onfocus="this.select()" value="[wptripolis-form form=' . $post_id . '" class="large-text code">';
+    }
   }
 }
