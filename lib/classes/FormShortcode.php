@@ -19,6 +19,8 @@ class FormShortcode
   protected $enqueued = false;
   protected $defaults = [
     'form' => false,
+    'css'  => true,
+    'js'   => true,
   ];
 
   static public function create()
@@ -43,6 +45,13 @@ class FormShortcode
     $config = shortcode_atts($this->defaults,$atts,'wptripolis-form');
     $form   = new Form($config['form']);
 
+    if ( !$config['js'] ) {
+      wp_dequeue_script('wptripolis-form');
+    }
+
+    if ( !$config['css'] ) {
+      wp_dequeue_style('wptripolis-form');
+    }
 
     set_query_var('wpform',$form);
 
