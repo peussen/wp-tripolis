@@ -28,7 +28,9 @@ class FormMetaBox
       }
       $response = [
         'status'  => true,
-        'contacts'=> $contacts
+        'contacts'=> isset($contacts['Subscription']) ? $contacts['Subscription'] : new stdObject
+        // 'contacts'=> $contacts
+
       ];
     } else {
       $response = [
@@ -93,6 +95,7 @@ class FormMetaBox
 
     $dbs = $this->api->ContactDatabase()->all();
 
+
     // $db = new \stdClass();
     // $db->id = 'a';
     // $db->label = "Dummy";
@@ -108,6 +111,7 @@ class FormMetaBox
     <div class="field-container">
       <label for="wptripolis_type">create a</label>
       <select name="wptripolis_type" data-tripolis="type">
+        <option value="default" disabled selected>--choose field--</option>
         <option value="subscribe"><?php _e('Subscription form','tripolis') ?></option>
         <option value="unsubscribe"><?php _e('Unsubscribe form','tripolis') ?></option>
         <option value="profile"><?php _e('Profile update form','tripolis') ?></option>
@@ -122,7 +126,24 @@ class FormMetaBox
           <option value="<?php echo $db->id ?>"><?php echo $db->label ?></option>
         <?php endforeach; ?>
       </select>
-      <img class="load" src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
+      <img class="ajax-loader" data-ajax-load src="<?= $_wptripolis['url'] ?>img/loading.gif" alt="loading...">
+    </div>
+
+    <div class="field-container" data-tripolis="unsubscribe-action">
+      <label for="wptripolis_action">What change should be made</label>
+      <select name="wptripolis_action">
+        <option value="default" disabled selected>--choose field--</option>
+        <option value="add">remove from all subscriptions</option>
+        <option value="remove">remove from specific subscription group</option>
+        <option value="delete">delete from database</option>
+      </select>
+    </div>
+
+    <div class="field-container" data-tripolis="contactgroup">
+      <label for="wptripolis_contactgroup">apply changes to subscription group</label>
+      <select name="wptripolis_contactgroup">
+        <option value="default" disabled selected>--choose field--</option>
+      </select>
     </div>
 
     <div class="field-container" data-tripolis="fields-parent">
@@ -141,9 +162,14 @@ class FormMetaBox
             <th></th>
           </tr>     
         </thead>
-        <tbody data-tripolis="fields-selected" class="sortable">
+        <tbody data-tripolis="fields-selected" class="sortable-js">
         </tbody>
       </table>
+
+    </div>
+
+    <div class="field-container" data-tripolis="generate-form">
+
 
     </div>
 
@@ -151,6 +177,7 @@ class FormMetaBox
        <p>
          Are you sure you want to switch database?
        </p>
+       <button type="button" data-cancel>cancel</button>
        <button type="button" data-confirm>confirm</button>
     </div>
   
@@ -171,7 +198,7 @@ class FormMetaBox
   {
     global $_wptripolis;
     add_thickbox();
-    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js',['jquery']);
+    wp_enqueue_script('wptripolis-js',$_wptripolis['url'] . 'js/admin.js',false,['jquery-ui-sortable'],false, true);
     wp_enqueue_style('wptripolis-css',$_wptripolis['url'] . 'css/admin.css');
   }
 
