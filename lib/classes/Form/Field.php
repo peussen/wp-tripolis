@@ -18,17 +18,9 @@ class Field
   public $id;
   public $type = 'string';
   public $default = '';
+  public $options = false;
 
   protected $source;
-
-  protected $definition_fields = [
-    'id'      => false,
-    'label'   => false,
-    'altlabel'=> false,
-    'required'=> false,
-    'default' => '',
-    'type'    => 'STRING'
-  ];
 
   public function __construct($definition,$form = null)
   {
@@ -40,6 +32,14 @@ class Field
     $this->type     = strtolower($definition['field']['type']);
     $this->default  = $definition['field']['default'];
     $this->source   = $definition['field'];
+
+    if ( $this->type === 'picklist' ) {
+      $this->options = [];
+
+      foreach( $definition['field']['options']['picklistItem'] as $optionset ) {
+        $this->options[$optionset['key']] = $optionset['value'];
+      }
+    }
   }
 
   public function __toString()
