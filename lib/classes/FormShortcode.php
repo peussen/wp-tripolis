@@ -10,6 +10,7 @@ namespace WPTripolis;
 use HarperJones\Tripolis\Contact;
 use WPTripolis\Form\Form;
 use WPTripolis\Form\FormProcessingException;
+use WPTripolis\Tripolis\TripolisException;
 use WPTripolis\Wordpress\Template;
 
 class FormShortcode
@@ -97,6 +98,8 @@ class FormShortcode
           $response['message'] = __('Could not save your contact information','wptripolis');
         }
       } catch (FormProcessingException $e) {
+        $response['message'] = $e->getMessage();
+      } catch ( TripolisException $e) {
         $response['message'] = $e->getMessage();
       }
 

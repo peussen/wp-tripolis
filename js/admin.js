@@ -288,7 +288,7 @@
       $.each( availableContactGroups, function(key, value) {
 
           $('<option />').
-          prop('value', value).
+          prop('value', key).
           prop('data-id', key).
           html(value).
           appendTo($(contactGroup));

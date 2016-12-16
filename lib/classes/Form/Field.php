@@ -42,6 +42,28 @@ class Field
     }
   }
 
+  public function sanitize($value)
+  {
+    switch($this->type) {
+      case 'decimal':
+        $point = strpos($value,'.');
+        $comma = strpos($value,',');
+
+        var_dump($comma,$point);
+        if ( $comma > $point ) {
+          $value = str_replace('.','',$value);
+          $value = str_replace(',','.',$value);
+        }
+        break;
+      case 'datetime':
+        $value = str_replace('T',' ',$value);
+        $value .= ':00';
+        break;
+      default:
+    }
+    return $value;
+  }
+
   public function __toString()
   {
     set_query_var('wpfield',$this);

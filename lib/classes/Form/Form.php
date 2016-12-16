@@ -52,7 +52,7 @@ class Form
 
     foreach( $fields as $id => $value ) {
       if ( isset($this->fields[$id]) ) {
-        $submitData[$id] = $value;
+        $submitData[$id] = $this->fields[$id]->sanitize($value);
       }
     }
 
@@ -70,15 +70,12 @@ class Form
 
           if ( $this->contactGroup ) {
             $current->join($this->contactGroup,true);
-            $response['status'] = true;
+            return true;
           }
         } catch (TripolisException $e) {
-          $response['message'] = $e->getMessage();
+          throw new FormProcessingException($e->getMessage());
         }
-
-
       }
-      return true;
     }
 
     throw new FormWithoutKeyFieldException(__("Can not store information because keyfield is missing from the form","wptripolis"));
