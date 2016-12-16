@@ -81,6 +81,8 @@ class Form
             break;
           case self::TYPE_UNSUBSCRIBE:
 
+            $contact->update($submitData);
+
             if ( $this->contactGroup ) {
               $current->join($this->contactGroup,true);
               return true;
