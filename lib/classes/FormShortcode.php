@@ -88,9 +88,14 @@ class FormShortcode
 
       try {
         if ( $form->process($_POST['fields']) ) {
-          $response['status'] = true;
+          $response['status']  = true;
+          $response['message'] = sprintf(
+            __('Your have been %s','wptripolis'),
+            ($form->action == Form::TYPE_SUBSCRIBE ? __('subscribed','wptripolis') : __('unsubscribed','wptripolis'))
+          );
+        } else {
+          $response['message'] = __('Could not save your contact information','wptripolis');
         }
-        $response['message'] = __('Could not save your contact information','wptripolis');
       } catch (FormProcessingException $e) {
         $response['message'] = $e->getMessage();
       }

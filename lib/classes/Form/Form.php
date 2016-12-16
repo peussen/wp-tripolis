@@ -92,9 +92,9 @@ class Form
     $data = @json_decode($post->post_content,true);
 
     if ( $data ) {
-      $this->db     = $data['db'];
-      $this->action = $data['type'];
-
+      $this->db           = $data['db'];
+      $this->action       = $data['type'];
+      $this->contactGroup = $data['contactgroup'];
 
       if ( is_array($data['fields'])) {
         foreach( $data['fields'] as $def ) {
