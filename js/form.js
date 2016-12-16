@@ -22,9 +22,11 @@
       if ( data.status ) {
         formStatus.addClass('success').removeClass('error');
         form.addClass('completed');
+        form.find('.wptripolis_form__field-container').addClass('hidden-xs-up');
       } else {
         formStatus.addClass('error').removeClass('success');
         form.removeClass('completed');
+        form.find('.wptripolis_form__field-container').removeClass('hidden-xs-up');
       }
     },'json');
 
