@@ -65,15 +65,33 @@ class Form
       if ( $current->valid() && $this->action === self::TYPE_SUBSCRIBE ) {
         throw new AlreadySubscribedException(__("You are already on the mailing list","wptripolis"));
       } else {
-        try {
-          $current = $contact->create($submitData);
 
-          if ( $this->contactGroup ) {
-            $current->join($this->contactGroup,true);
+        switch ( $this->action ) {
+          case self::TYPE_SUBSCRIBE:
+            try {
+              $current = $contact->create($submitData);
+
+              if ( $this->contactGroup ) {
+                $current->join($this->contactGroup,true);
+              }
+              return true;
+            } catch (TripolisException $e) {
+              throw new FormProcessingException($e->getMessage());
+            }
+            break;
+          case self::TYPE_UNSUBSCRIBE:
+
+            if ( $this->contactGroup ) {
+              $current->join($this->contactGroup,true);
+              return true;
+            }
+            $subs = $contact->subscriptions();
+
+            foreach( $subs as $groupId => $label ) {
+              $contact->leave($groupId,true);
+            }
             return true;
-          }
-        } catch (TripolisException $e) {
-          throw new FormProcessingException($e->getMessage());
+            break;
         }
       }
     }
