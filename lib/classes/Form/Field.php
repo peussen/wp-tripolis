@@ -49,16 +49,23 @@ class Field
         $point = strpos($value,'.');
         $comma = strpos($value,',');
 
-        var_dump($comma,$point);
         if ( $comma > $point ) {
           $value = str_replace('.','',$value);
           $value = str_replace(',','.',$value);
         }
         break;
       case 'datetime':
-        $value = str_replace('T',' ',$value);
-        $value .= ':00';
+        if ( empty($value) ) {
+          $value = null;
+        } else {
+          $value = str_replace('T',' ',$value);
+          $value .= ':00';
+        }
         break;
+      case 'date':
+        if ( empty($value)) {
+          $value = null;
+        }
       default:
     }
     return $value;

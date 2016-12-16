@@ -2,8 +2,8 @@
 ;(function($){
 
   $(document).on('submit','[data-wptripolis]',function(e) {
-    console.log("SUBMIT");
     var formId     = $(this).data('wptripolis'),
+        form       = $(this),
         formStatus = $(this).find('[data-wptripolis-form-message]');
         payload    = {
           form: formId,
@@ -21,8 +21,10 @@
       formStatus.html(data.message)
       if ( data.status ) {
         formStatus.addClass('success').removeClass('error');
+        form.addClass('completed');
       } else {
         formStatus.addClass('error').removeClass('success');
+        form.removeClass('completed');
       }
     },'json');
 
